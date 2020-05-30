@@ -1,0 +1,26 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1590667006685.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "1935801942",
+    "id" : "AE336BF5",
+    "lastKnownWriteTime" : 1590853220,
+    "last_content_update" : 1590853220913,
+    "path" : "~/Desktop/MCM/forecast.R",
+    "project_path" : "forecast.R",
+    "properties" : {
+        "cursorPosition" : "112,26",
+        "scrollLine" : "94",
+        "tempName" : "Untitled1"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
