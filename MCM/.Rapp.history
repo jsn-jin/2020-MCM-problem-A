@@ -1,0 +1,115 @@
+library(tidyverse)#
+library(plot.matrix)#
+#
+forecast = read.csv("forecast_sst_50.csv", row.names = 1)#
+#
+# Example#
+x <- matrix(runif(35), ncol=5) # create a numeric matrix object#
+x#
+par(mar=c(5.1, 4.1, 4.1, 4.1)) # adapt margins#
+plot(x)#
+#
+# Actual Data#
+sst_2029 = matrix(forecast[10,], nrow = 15, ncol = 20, byrow = TRUE)#
+colnames(sst_2029) = seq(-16.5, 2.5, 1)#
+rownames(sst_2029) = seq(62.5, 48.5, -1)#
+par(mar = c(5.1, 4.1, 4.1, 4.1))#
+plot(sst_2029, xlab = "Longitude", ylab = 'Latitude', main = "2029 SST", breaks = seq(7,13,0.1), col = "topo.colors")#
+#
+plot(sst_2029)#
+#
+min(forecast, na.rm = TRUE)#
+#
+max(forecast, na.rm = TRUE)
+packages.install("plot.matrix")
+install.packages("plot.matrix")
+plot(x，col = topo.colors)
+plot(x, col = topo.colors)
+plot(sst_2029, xlab = "Longitude", ylab = 'Latitude', main = "2029 SST", breaks = seq(7,13,0.1), col = topo.colors)
+plot(sst_2029, xlab = "Longitude", ylab = 'Latitude', main = "2029 SST", col = topo.colors)
+plot(x, xlab = "Longitude", ylab = 'Latitude', main = "2029 SST", breaks = seq(7,13,0.1), col = topo.colors)
+sst_2019
+sst_2029 = matrix(forecast[10,], nrow = 15, ncol = 20, byrow = TRUE)
+sst_2019
+sst_2029
+plot(sst_2029, xlab = "Longitude", ylab = 'Latitude', main = "2029 SST", breaks = seq(7,13,0.1), col = topo.colors)
+plot(sst_2029, xlab = "Longitude", ylab = 'Latitude', main = "2029 SST", col = topo.colors)
+library('plot.matrix')
+plot(sst_2029, xlab = "Longitude", ylab = 'Latitude', main = "2029 SST", col = topo.colors)
+library('LSD')
+plot(sst_2029, xlab = "Longitude", ylab = 'Latitude', main = "2029 SST", col = topo.colors)
+plot(sst_2029, xlab = "Longitude", ylab = 'Latitude', main = "2029 SST")
+class(sst_2029)
+class(sst_2029[1])
+class(sst_2029[1,])
+class(forecast)
+class(forecast[1,2])
+class(forecast[10,])
+class(forecast[10,2])
+sst_2029 = matrix(as.numeric(forecast[10,]), nrow = 15, ncol = 20, byrow = TRUE)
+class(sst_2029[1])
+plot(sst_2029, xlab = "Longitude", ylab = 'Latitude', main = "2029 SST")
+plot(sst_2029, xlab = "Longitude", ylab = 'Latitude', main = "2029 SST", breaks = seq(7,14,0.2), col = topo.colors)
+sst_2029 = matrix(as.numeric(forecast[10,]), nrow = 15, ncol = 20, byrow = TRUE)#
+colnames(sst_2029) = seq(-16.5, 2.5, 1)#
+rownames(sst_2029) = seq(62.5, 48.5, -1)#
+par(mar = c(5.1, 4.1, 4.1, 4.1))#
+plot(sst_2029, xlab = "Longitude", ylab = 'Latitude', main = "2029 SST", breaks = seq(7,14,0.2), col = topo.colors)
+min(forecast, na.rm = TRUE)#
+#
+max(forecast, na.rm = TRUE)
+plot(sst_2029, xlab = "Longitude", ylab = 'Latitude', main = "2029 SST", breaks = seq(7,15,0.2), col = topo.colors)
+plot(sst_2029, xlab = "Longitude", ylab = 'Latitude', main = "2029 SST", breaks = seq(8,15,0.2), col = topo.colors)
+#***************************************************************************#
+# Data Wrangling#
+# Dataset: #
+#     "scot_sst_aug.csv"  1970-2019, monthly data with location information#
+#     "scot_sst_150.csv"  1870-2019, monthly data#
+# Author: Hao Jin#
+#***************************************************************************#
+#
+library(tidyverse)#
+#
+sst_150 = read_csv("scot_sst_150.csv") # 1870-2019, monthly data#
+sst_150 = t(sst_150) # transpose#
+sst_150_ts <- ts(sst_150, start = c(1870,1), end = c(2019,12), freq = 12)#
+#
+# Get annually data (the average of 12 months)#
+annual_avg_sst = matrix(nrow = 150, ncol = 300) # to store annually average results#
+#
+for (b in 1:300) { # for each block#
+  # Prepare a vector#
+  b.annually = numeric(150)#
+  # Get the data at the b-th block: first@(-16.5, 62.5), last@(2.5, 48.5)#
+  b.monthly = sst_150_ts[,b]#
+  # Calculate annually mean #
+  for (i in 0:149) {#
+    annual_sum = 0#
+    for (j in 1:12) {#
+      annual_sum = annual_sum + b.monthly[12 * i + j]#
+    }#
+    b.annually[i+1] = annual_sum / 12#
+  }#
+  annual_avg_sst[,b] = b.annually#
+}#
+#
+annual_avg_sst = ts(annual_avg_sst, start = c(1870, 1), freq = 12)#
+#
+# Get location information#
+location_info = read_csv("scot_sst_aug.csv")#
+lon = location_info[[1]]#
+lat = location_info[[2]]#
+loc = character(300)#
+#
+for (i in 1:300) {#
+  loc[i] = paste(as.character(lat[i]), as.character(lon[i]))#
+}#
+#
+rownames(annual_avg_sst) = seq(1870, 2019)#
+write.csv(annual_avg_sst, file = "annual_avg_sst_150.csv")#
+#
+write.csv(loc, file = "loc.csv")
+write.csv(annual_avg_sst, file = "annual_avg_sst_150.csv", col.names = FALSE)
+help(write.csv)
+help(write.csv)
+help(write.csv)
