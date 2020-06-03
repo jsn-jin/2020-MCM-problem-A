@@ -1,0 +1,26 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1590963792292.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "52ED4419",
+    "lastKnownWriteTime" : 1590969993,
+    "last_content_update" : 1590969993559,
+    "path" : "~/Downloads/mcm_project-master/MCM/stoc_model.R",
+    "project_path" : "stoc_model.R",
+    "properties" : {
+        "cursorPosition" : "1,37",
+        "scrollLine" : "1",
+        "tempName" : "Untitled1"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 3,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

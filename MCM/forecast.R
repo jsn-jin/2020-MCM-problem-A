@@ -7,8 +7,12 @@
 
 library(tidyverse)
 library(forecast)
+library(stats)
+library(tis)
+library(trend)
+library(tseries)
 
-annual_avg_sst = read.csv("annual_avg_sst.csv", row.names = 1)
+annual_avg_sst = read.csv("annual_avg_sst_150.csv", row.names = 1)
 loc = read.csv("loc.csv", row.names = 1)
 colnames(annual_avg_sst) = loc[[1]]
 
@@ -38,6 +42,22 @@ accuracy(arima310) # Best Model
 accuracy(arima210)
 accuracy(arima110)
 
+
+# The null hypothesis for this test is that there is no monotonic trend in the series.
+# The alternate hypothesis is that a trend exists. This trend can be positive, negative, or non-null.
+
+mk.test(first_block)
+
+t = seq(1870, 1870 + length(first_block)-1)
+t1 = lm(first_block ~ t) 
+
+jpeg("block_1_trend.jpg", width = 600, height = 600)
+
+plot(first_block, ylab = "Annually Average SST", xlab = "Time", lwd = 2, col = 'skyblue3', main = "Sea Surface Temperature in the Part 150 Years at Block 1")
+lines(t, t1$fit, col = "red3", lwd = 2)
+legend(x = "topleft", legend = c("Observed Data", "Fitted Trend"), col = c("skyblue3", "red3"), lty = c(1,1), lwd = c(2,2), inset = 0.05)
+
+dev.off()
 
 
 # ------------------ Forecast for all 300 blocks ------------------ #

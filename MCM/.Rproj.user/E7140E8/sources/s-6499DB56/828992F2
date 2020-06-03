@@ -1,0 +1,26 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1591158463649.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "828992F2",
+    "lastKnownWriteTime" : 1591171416,
+    "last_content_update" : 1591171416100,
+    "path" : "~/Downloads/mcm_project-master/MCM/graphics.R",
+    "project_path" : "graphics.R",
+    "properties" : {
+        "cursorPosition" : "198,31",
+        "scrollLine" : "13",
+        "tempName" : "Untitled1"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 9,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

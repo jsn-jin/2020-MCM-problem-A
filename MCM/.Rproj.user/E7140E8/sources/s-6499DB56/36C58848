@@ -1,0 +1,26 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1590894777388.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "36C58848",
+    "lastKnownWriteTime" : 1590906434,
+    "last_content_update" : 1590906434449,
+    "path" : "~/Downloads/mcm_project-master/MCM/test_model.R",
+    "project_path" : "test_model.R",
+    "properties" : {
+        "cursorPosition" : "3,11",
+        "scrollLine" : "0",
+        "tempName" : "Untitled1"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

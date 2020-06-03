@@ -1,0 +1,169 @@
+---
+title: "Project 2-1"
+author: "Daphne Chen"
+output: pdf_document
+---
+```{r}
+library(ggplot2)
+library(ggpubr)
+```
+## 1. Deterministic  
+</center>
+![Deterministic Model](deterministicPic.jpg)
+</center>
+```{r}
+deterministic <- 100
+for(i in 2:20) {
+  births <- (0.4*deterministic[i-1])
+  deaths <- (0.32*deterministic[i-1])
+  deterministic[i] <- deterministic[i-1] + births - deaths
+}
+# table of population over 20 years (in csv file)
+write.csv(data.frame("Population" = deterministic), file = "deterministicModel.csv")
+
+# graph of population over 20 years
+plot(1:20, deterministic, main = "Deterministic Model of Bobcats", xlab = "Population", ylab = "Year", type = "o", cex = 0.5, col = "red")
+```
+
+## 2. Demographic Stochasticity  
+</center>
+![Demographic Model](demographicPic.jpg)
+</center>
+```{r}
+set.seed(42)
+
+demographic <- as.data.frame(matrix(100, nrow = 50, ncol = 20))
+for(i in seq_len(50)) {
+  for(j in 2:20) {
+    births <- rnorm(1, 0.4, 0.1)*demographic[i,j-1]
+    deaths <- (1 - rnorm(1, 0.68, 0.07))*demographic[i,j-1]
+    demographic[i,j] <- demographic[i,j-1] + births - deaths
+  }
+}
+
+# table of population over 20 years (in csv file)
+row.names(demographic) <- paste0("Sim ", as.character(1:50))
+colnames(demographic) <- paste0("Year ", as.character(1:20))
+write.csv(demographic, file = "demographicStochasticityModel.csv")
+```
+```{r, echo = FALSE}
+# graph of population over 20 years
+matplot(t(demographic), main = "Demographic Stochasticity Model of Bobcats", xlab = "Population", ylab = "Year", type = "l", col = "blue")
+lines(1:20, deterministic, lwd = 1.5, col = "red")
+legend(x = "topleft", legend = c("stochastic", "deterministic"), col = c("blue", "red"), lwd = c(1,1.5), cex = 0.85)
+```
+
+## 3. Environmental Stochasticity  
+</center>
+![Environmental Model](environmentalPic.jpg)
+</center>
+```{r}
+set.seed(88)
+
+environmental <- as.data.frame(matrix(100, nrow = 50, ncol = 20))
+for(i in seq_len(50)) {
+  for(j in 2:20) {
+    catastrophe <- runif(1)
+    if(catastrophe <= 0.04) {
+      births <- (0.4*0.7)*environmental[i,j-1]
+      deaths <- (1 - (0.68*0.7))*environmental[i,j-1]
+      environmental[i,j] <- environmental[i,j-1] + births - deaths
+    } else {
+      births <- (0.4*environmental[i,j-1])
+      deaths <- (0.32*environmental[i,j-1])
+      environmental[i,j] <- environmental[i,j-1] + births - deaths
+    }
+  }
+}
+
+# table of population over 20 years (in csv file)
+row.names(environmental) <- paste0("Sim ", as.character(1:50))
+colnames(environmental) <- paste0("Year ", as.character(1:20))
+write.csv(environmental, file = "environmentalStochasticityModel.csv")
+```
+```{r, echo = FALSE}
+# graph of population over 20 years
+matplot(t(environmental), main = "Environmental Stochasticity Model of Bobcats", xlab = "Population", ylab = "Year", type = "l", col = "blue")
+lines(1:20, deterministic, lty = 3, lwd = 1.5, col = "red")
+legend(x = "topleft", legend = c("stochastic", "deterministic"), col = c("blue", "red"), lty = c(1,3), lwd = c(1,1.5), cex = 0.85)
+```
+
+## 4. 20th Year Stochastic Model Statistics  
+The demographic model shows less variation, with a much lower standard deviation than the environmental model. In the environmental model, catastrophes happen infrequently, only 4% of the time, yet the results drastically change the population of bobcats. Thus, the histogram shows a more bimodal distribution, where bobcats either survive with relatively no catastrophes (following more of a deterministic model) or they suffer great population declines due to these catastrophes.
+```{r}
+# demographic model statistics
+dem_20 <- demographic[,20]
+dem_report <- summary(dem_20)
+dem_report["Std.Dev."] <- round(sd(dem_20),2)
+dem_report["Range"] <- range(dem_20)
+dem_report["IQR"] <- round(IQR(dem_20),2)
+dem_report
+```
+```{r, echo = FALSE}
+gghistogram(dem_20, title = "Demographic Model Histogram", xlab = "Population", ylab = "Frequency", col = "blue", bins = 10)
+ggboxplot(dem_20, title = "Demographic Model Boxplot", xlab = "Year 20", ylab = "Population")
+```
+```{r}
+# enviornmental model statistics
+env_20 <- environmental[,20]
+env_report <- summary(env_20)
+env_report["Std.Dev."] <- round(sd(env_20),2)
+env_report["Range"] <- range(env_20)
+env_report["IQR"] <- round(IQR(env_20),2)
+env_report
+```
+```{r, echo = FALSE}
+gghistogram(env_20, title = "Environmental Model Histogram", xlab = "Population", ylab = "Frequency", col = "blue", bins = 10)
+ggboxplot(dem_20, title = "Environmental Model Boxplot", xlab = "Year 20", ylab = "Population")
+```
+
+## 5. Side-to-Side Boxplots  
+The demographic change in distribution over 10 years follows closely to the deterministic model. On the other hand, the environmental model is almost identical to the deterministic model because they are practically the same model but environmental has the added element of a catastrophe that occcurs only 4% of the time. Since 4% is relatively small, it does not show up on the box-whisker part, but it does appear as outliers. The outliers represent each time a catastrophe occurs that significantly changes the population of the bobcats during that given year.
+```{r}
+# Demographic stochasticity
+boxplot(demographic[,1:10], ylab = "Population", main = "Demographic Change in Distribution")
+det <- matrix(rep(deterministic[1:10], each = 50), ncol = 10)
+ # red represents deterministic model
+boxplot(det, medcol = "red", add = TRUE, names = rep("", times = 10))
+
+# Environmental stochasticity
+boxplot(environmental[,1:10], ylab = "Population", main = "Environmental Change in Distribution")
+# red represents deterministic model
+boxplot(det, medcol = "red", add = TRUE, names = rep("", times = 10)) 
+```
+
+## 6. Both Demographic and Environmental Stochastic Elements  
+My simulation shows that the stochastic effect is more pronounced when combining demographic and environmental stochastic effects. The demographic effect shows variation for each simulation while the environmental effect contributes to the existence of a catastrophe dependent on the population at each year of each simulation. This combined stochasticity creates a model that is more pronounced and possibly more accurately represents the population of bobcats over time.
+```{r}
+set.seed(68)
+
+both <- as.data.frame(matrix(100, nrow = 50, ncol = 20))
+for(i in seq_len(50)) {
+  for(j in 2:20) {
+    catastrophe <- runif(1)
+    if(catastrophe <= 0.04) {
+      births <- (rnorm(1, 0.4, 0.1)*0.7)*both[i,j-1]
+      deaths <- (1 - (rnorm(1, 0.68, 0.07)*0.7))*both[i,j-1]
+      both[i,j] <- both[i,j-1] + births - deaths
+    } else {
+      births <- rnorm(1, 0.4, 0.1)*both[i,j-1]
+      deaths <- (1 - rnorm(1, 0.68, 0.07))*both[i,j-1]
+      both[i,j] <- both[i,j-1] + births - deaths
+    }
+  }
+}
+
+# table of population over 20 years (in csv file)
+row.names(both) <- paste0("Sim ", as.character(1:50))
+colnames(both) <- paste0("Year ", as.character(1:20))
+write.csv(both, file = "environmentalStochasticityModel.csv")
+```
+```{r, echo = FALSE}
+# graph of population over 20 years
+matplot(t(both), main = "Combined Environmental Stochasticity Model of Bobcats", xlab = "Population", ylab = "Year", type = "l", col = "blue")
+lines(1:20, deterministic, lwd = 1.5, col = "red")
+legend(x = "topleft", legend = c("stochastic", "deterministic"), col = c("blue", "red"), lwd = c(1,1.5), cex = 0.85)
+
+gghistogram(both[,20], title = "Combined Environmental Stochasticity Model Histogram", xlab = "Population", ylab = "Frequency", col = "blue", bins = 10)
+boxplot(both, title = "Combined Environmental Stochasticity Model Boxplot", ylab = "Population")
+```
