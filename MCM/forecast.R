@@ -16,13 +16,41 @@ annual_avg_sst = read.csv("annual_avg_sst_150.csv", row.names = 1)
 loc = read.csv("loc.csv", row.names = 1)
 colnames(annual_avg_sst) = loc[[1]]
 
+first_block = ts(annual_avg_sst[,1], start = 1870, end = 2019)
+
+## --------------------- Time Series Plot, Trend --------------------- ##
+
+jpeg("block_1_ts.jpg", width = 600, height = 600)
+
+plot(first_block, ylab = "Annually Average SST", xlab = "Time", lwd = 2, col = 'skyblue3', main = "Sea Surface Temperature in the Past 150 Years at Block 1")
+abline(h = mean(first_block), col = "black", lwd = 2)
+legend(x = "topleft", legend = "Observed Data", col = "skyblue3", lwd = 2, inset = 0.05)
+
+dev.off()
+
+# The null hypothesis for this test is that there is no monotonic trend in the series.
+# The alternate hypothesis is that a trend exists. This trend can be positive, negative, or non-null.
+
+mk.test(first_block)
+
+t = seq(1870, 1870 + length(first_block)-1)
+t1 = lm(first_block ~ t) 
+
+jpeg("block_1_trend.jpg", width = 600, height = 600)
+
+plot(first_block, ylab = "Annually Average SST", xlab = "Time", lwd = 2, col = 'skyblue3', main = "Sea Surface Temperature in the Past 150 Years at Block 1")
+lines(t, t1$fit, col = "red3", lwd = 2)
+legend(x = "topleft", legend = c("Observed Data", "Fitted Trend"), col = c("skyblue3", "red3"), lty = c(1,1), lwd = c(2,2), inset = 0.05)
+
+dev.off()
+
 
 
 ## ------------------------ Model Selection ------------------------ ##
 
-first_block = ts(annual_avg_sst[,1], start = 1870, end = 2019)
-
-tsdisplay(first_block) # AR(3)
+jpeg("block_1_acf.jpg", width = 600, height = 600)
+tsdisplay(first_block, main = "Time Series, ACF, and PACF of the SST of the First Block") # AR(3)
+dev.off()
 
 arima310 = Arima(first_block, order = c(3,1,0), include.drift = TRUE)
 
@@ -43,21 +71,7 @@ accuracy(arima210)
 accuracy(arima110)
 
 
-# The null hypothesis for this test is that there is no monotonic trend in the series.
-# The alternate hypothesis is that a trend exists. This trend can be positive, negative, or non-null.
 
-mk.test(first_block)
-
-t = seq(1870, 1870 + length(first_block)-1)
-t1 = lm(first_block ~ t) 
-
-jpeg("block_1_trend.jpg", width = 600, height = 600)
-
-plot(first_block, ylab = "Annually Average SST", xlab = "Time", lwd = 2, col = 'skyblue3', main = "Sea Surface Temperature in the Part 150 Years at Block 1")
-lines(t, t1$fit, col = "red3", lwd = 2)
-legend(x = "topleft", legend = c("Observed Data", "Fitted Trend"), col = c("skyblue3", "red3"), lty = c(1,1), lwd = c(2,2), inset = 0.05)
-
-dev.off()
 
 
 # ------------------ Forecast for all 300 blocks ------------------ #
