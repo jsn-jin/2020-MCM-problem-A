@@ -17,9 +17,7 @@ library(stringr)
 library("viridis") 
 library(RColorBrewer)        
 
-forecast = read.csv("forecast_sst_50.csv", row.names = 1)
-loc = read.csv("loc.csv", row.names = 1)
-colnames(forecast) = loc[[1]]
+forecast = read.csv("forecast_sst_50_t.csv", row.names = 1)
 
 # Example
 x <- matrix(runif(35), ncol=5) # create a numeric matrix object
@@ -28,11 +26,23 @@ par(mar=c(5.1, 4.1, 4.1, 4.1)) # adapt margins
 plot(x, col = topo.colors)
 
 # Actual Data
-sst_2029 = matrix(as.numeric(forecast[,11]), nrow = 15, ncol = 20, byrow = TRUE)
-colnames(sst_2029) = seq(-16.5, 2.5, 1)
-rownames(sst_2029) = seq(62.5, 48.5, -1)
-par(mar = c(5.1, 4.1, 4.1, 4.1))
-plot(sst_2029, xlab = "Longitude", ylab = 'Latitude', main = "2029 SST", breaks = seq(8,15,0.2), col = topo.colors)
+sst_2020 = matrix(as.numeric(forecast[,1]), nrow = 15, ncol = 20, byrow = TRUE)
+colnames(sst_2020) = seq(-16.5, 2.5, 1)
+rownames(sst_2020) = seq(62.5, 48.5, -1)
+
+png("2020_sst.png", 610, 541)
+par(mar = c(5, 5, 5, 5)) # Set the margin on all sides to 5
+plot(sst_2020, xlab = "Longitude", ylab = 'Latitude', main = "Forecasted SST for 2020", breaks = seq(8,15,0.2), col = topo.colors)
+dev.off()
+
+sst_2069 = matrix(as.numeric(forecast[,50]), nrow = 15, ncol = 20, byrow = TRUE)
+colnames(sst_2069) = seq(-16.5, 2.5, 1)
+rownames(sst_2069) = seq(62.5, 48.5, -1)
+
+png("2069_sst.png", 610, 541)
+par(mar = c(5, 5, 5, 5)) # Set the margin on all sides to 5
+plot(sst_2069, xlab = "Longitude", ylab = 'Latitude', main = "Forecasted SST for 2069", breaks = seq(8,15,0.2), col = topo.colors)
+dev.off()
 
 min(forecast, na.rm = TRUE)
 
@@ -104,13 +114,12 @@ for (n in years_col){
 
 	colnames(loc_counter) = seq(-16.5, 2.5, 1)
 	rownames(loc_counter) = seq(62.5, 48.5, -1)
-	par(mar = c(5.1, 4.1, 4.1, 4.1))
 
 	# Visualize
-	
 	file = paste("bch_map_20", n+17, ".png", sep = "")
 	main = paste( "The Mostly Likely Location for Herring in 20", n+17, ", Best Case", sep = "")
-	png(file, 600,600)
+	png(file, 610, 541)
+	par(mar = c(5, 5, 5, 5)) # Set the margin on all sides to 5
 	plot(loc_counter, xlab = "Longitude", ylab = 'Latitude', 
 	main = main, 
 	fmt.cell = '%d', col = plasma(20))
@@ -166,7 +175,7 @@ for (n in years_col){
 
 	# Mark Land
 	for (i in seq_len(300)) {
-		if(is.na(forecast[i,11]))
+	  if(is.na(forecast[i,11]))
 		counter[i] = NA
 	}
 
@@ -179,13 +188,13 @@ for (n in years_col){
 
 	colnames(loc_counter) = seq(-16.5, 2.5, 1)
 	rownames(loc_counter) = seq(62.5, 48.5, -1)
-	par(mar = c(5.1, 4.1, 4.1, 4.1))
 
 	# Visualize
 	
 	file = paste("wch_map_20", n+17, ".png", sep = "")
-	main = paste( "The Mostly Likely Location for Herring in 20", n+18, ", Worst Case", sep = "")
-	png(file, 600,600)
+	main = paste( "The Mostly Likely Location for Herring in 20", n+17, ", Worst Case", sep = "")
+	png(file, 610, 541)
+	par(mar = c(5, 5, 5, 5))
 	plot(loc_counter, xlab = "Longitude", ylab = 'Latitude', 
 	main = main, 
 	fmt.cell = '%d', col = plasma(20))
@@ -254,13 +263,12 @@ for (n in years_col){
 
 	colnames(loc_counter) = seq(-16.5, 2.5, 1)
 	rownames(loc_counter) = seq(62.5, 48.5, -1)
-	par(mar = c(5.1, 4.1, 4.1, 4.1))
 
 	# Visualize
-	
 	file = paste("bcm_map_20", n+17, ".png", sep = "")
 	main = paste( "The Mostly Likely Location for Mackerel in 20", n+17, ", Best Case", sep = "")
-	png(file, 600,600)
+	png(file, 610, 541)
+	par(mar = c(5, 5, 5, 5))
 	plot(loc_counter, xlab = "Longitude", ylab = 'Latitude', 
 	main = main, 
 	fmt.cell = '%d', col = plasma(20))
@@ -328,13 +336,12 @@ for (n in years_col){
 
 	colnames(loc_counter) = seq(-16.5, 2.5, 1)
 	rownames(loc_counter) = seq(62.5, 48.5, -1)
-	par(mar = c(5.1, 4.1, 4.1, 4.1))
 
 	# Visualize
-	
 	file = paste("wcm_map_20", n+17, ".png", sep = "")
 	main = paste( "The Mostly Likely Location for Mackerel in 20", n+17, ", Worst Case", sep = "")
-	png(file, 600,600)
+	png(file, 610, 541)
+	par(mar = c(5, 5, 5, 5))
 	plot(loc_counter, xlab = "Longitude", ylab = 'Latitude', 
 	main = main, 
 	fmt.cell = '%d', col = plasma(20))

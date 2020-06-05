@@ -1851,3 +1851,239 @@ dev.off()
 jpeg("block_1_acf.jpg", width = 600, height = 600)#
 tsdisplay(first_block, main = "Time Series, ACF, and PACF of the SST of the First Block") # AR(3)#
 dev.off()
+sst_150 = read.csv("scot_sst_150.csv")
+sst_150_ts = ts(sst_150, start = c(1870,1), freq = 12)
+plot(sst_150_ts)
+sst_150_ts = ts(t(sst_150), start = c(1870,1), freq = 12)#
+#
+plot(sst_150_ts)
+library(tidyverse)#
+library(forecast)#
+library(stats)#
+library(tis)#
+library(trend)#
+library(tseries)#
+#
+sst_150 = read.csv("scot_sst_150.csv")#
+#
+sst_150_ts = ts(t(sst_150), start = c(1870,1), end = c(2019,12), freq = 12)#
+#
+ts.plot(sst_150_ts)
+ts.plot(sst_150_ts[,1:50])
+ts.plot(sst_150_ts)
+ts.plot(sst_150_ts[101:150,])
+ts.plot(sst_150_ts[101*12:150*12,])
+ts.plot(sst_150_ts[101*12:150*12-1,])
+ts.plot(sst_150_ts[1500:1800,])
+ts.plot(sst_150_ts[1500:1800,], col = "steelblue2")
+ts.plot(sst_150_ts, col = "steelblue2")
+ts.plot(sst_150_ts, col = "steelblue2", lty = 0.5)
+ts.plot(sst_150_ts, col = "steelblue2", lwd = 0.5)
+png("all_blocks_past_150.png", 1200, 600)#
+ts.plot(sst_150_ts, col = "steelblue2", lwd = 0.5)#
+dev.off
+png("all_blocks_past_150.png", 1200, 600)#
+ts.plot(sst_150_ts, col = "steelblue2", lwd = 0.5)#
+dev.off()
+png("all_blocks_past_150.png", 1200, 600)#
+ts.plot(sst_150_ts, col = "steelblue2", lwd = 0.5, main = "Monthly SST from 1870 to 2019 of All 300 Grids")#
+dev.off()
+png("all_blocks_past_150.png", 1200, 600)#
+ts.plot(sst_150_ts, col = "steelblue2", lwd = 0.5, main = "Monthly SST from 1870 to 2019 of All 300 Grids", cex.main = 1.5, cex.lab = 1.5)#
+dev.off()
+png("all_blocks_past_150.png", 1200, 600)#
+ts.plot(sst_150_ts, col = "steelblue2", lwd = 0.5, main = "Monthly SST from 1870 to 2019 of All 300 Grids", cex.main = 2, cex.lab = 2)#
+dev.off()
+png("all_blocks_past_5.png", 1200, 600)#
+ts.plot(sst_150_ts[1741:1800,], col = "steelblue2", lwd = 0.5, main = "Monthly SST from 2015 to 2019 of All 300 Grids", cex.main = 2, cex.lab = 2)#
+dev.off()
+plot(sst_150_ts[1741:1800,], col = "steelblue2", lwd = 0.5, main = "Monthly SST from 2015 to 2019 of All 300 Grids", cex.main = 2, cex.lab = 2)
+dev.off()
+plot(sst_150_ts[1741:1800,], col = "steelblue2", lwd = 0.5, main = "Monthly SST from 2015 to 2019 of All 300 Grids", cex.main = 2, cex.lab = 2)
+length(sst_150_ts[1741:1800,])
+length(sst_150_ts[1741:1800,1])
+sst_5_ts = ts(sst_150_ts[1741:1800,], start = c(2015,1), end = c(2019,12), freq = 12)
+png("all_blocks_past_5.png", 1200, 600)#
+#
+plot(sst_5_ts, col = "steelblue2", lwd = 0.5, main = "Monthly SST from 2015 to 2019 of All 300 Grids", cex.main = 2, cex.lab = 2)#
+#
+dev.off()
+png("all_blocks_past_5.png", 1200, 600)#
+#
+ts.plot(sst_5_ts, col = "steelblue2", lwd = 0.5, main = "Monthly SST from 2015 to 2019 of All 300 Grids", cex.main = 2, cex.lab = 2)#
+#
+dev.off()
+stl(sst_150[,1])
+stl(sst_150_ts[,1])
+stl(sst_150_ts[,1], s.window = "periodic")
+plot(stl(sst_150_ts[,1], s.window = "periodic"))
+mean(sst_150_ts[1:600,])
+mean(sst_150_ts[1:600,], na.rm = "TRUE")
+mean(sst_150_ts[601:1200,], na.rm = "TRUE")
+mean(sst_150_ts[1201:1800,], na.rm = "TRUE")
+t = seq(1870, 2019+11/12, by = 1/12)
+model = lm(sst_150_ts[1] ~ t)
+model = lm(sst_150_ts[,1] ~ t)
+model
+ts.plot(sst_150_ts, col = "steelblue2", lwd = 0.5, main = "Monthly SST from 1870 to 2019 of All 300 Grids", cex.main = 2, cex.lab = 2)#
+lines(t, model$fitted)
+model1 = lm(sst_150_ts[,1] ~ t)#
+model2 = lm(sst_150_ts[,300] ~ t)#
+#
+ts.plot(sst_150_ts, col = "steelblue2", lwd = 0.5, main = "Monthly SST from 1870 to 2019 of All 300 Grids", cex.main = 2, cex.lab = 2)#
+lines(t, model1$fitted)#
+lines(t, model2$fitted)
+model2 = lm(sst_150_ts[,300] ~ t)
+model2 = lm(sst_150_ts[,295] ~ t)
+ts.plot(sst_150_ts, col = "steelblue2", lwd = 0.5, main = "Monthly SST from 1870 to 2019 of All 300 Grids", cex.main = 2, cex.lab = 2)#
+lines(t, model1$fitted)#
+lines(t, model2$fitted)
+plot(diff(first_block), ylab = "Annually Change of SST", xlab = "Time", lwd = 2, col = 'skyblue3', main = "Change of SST in the Past 150 Years at Block 1")#
+legend(x = "topleft", legend = "Detrended Data", col = "skyblue3", lwd = 2, inset = 0.05)
+library(tidyverse)#
+library(forecast)#
+library(stats)#
+library(tis)#
+library(trend)#
+library(tseries)#
+#
+annual_avg_sst = read.csv("annual_avg_sst_150.csv", row.names = 1)#
+loc = read.csv("loc.csv", row.names = 1)#
+colnames(annual_avg_sst) = loc[[1]]#
+#
+first_block = ts(annual_avg_sst[,1], start = 1870, end = 2019)
+plot(diff(first_block), ylab = "Annually Change of SST", xlab = "Time", lwd = 2, col = 'skyblue3', main = "Change of SST in the Past 150 Years at Block 1")
+plot(diff(first_block), ylab = "Annually Change of SST", xlab = "Time", lwd = 2, col = 'skyblue3', main = "Change of SST in the Past 150 Years at Block 1")#
+legend(x = "topleft", legend = "Detrended Data", col = "skyblue3", lwd = 2, inset = 0.05)
+jpeg("block_1_stationary.jpg", width = 600, height = 600)#
+#
+plot(diff(first_block), ylab = "Annually Change of SST", xlab = "Time", lwd = 2, col = 'skyblue3', main = "Change of SST in the Past 150 Years at Block 1")#
+legend(x = "topleft", legend = "Detrended Data", col = "skyblue3", lwd = 2, inset = 0.05)#
+#
+dev.off()
+plot(sst_150_ts[,1], ylab = "Monthly SST", xlab = "Time", lwd = 2, col = 'skyblue3', main = "Sea Surface Temperature in the Past 150 Years at Block 1")#
+legend(x = "topleft", legend = "Observed Data", col = "skyblue3", lwd = 2, inset = 0.05)
+plot(sst_150_ts[1600,1800,1], ylab = "Monthly SST", xlab = "Time", lwd = 2, col = 'skyblue3', main = "Sea Surface Temperature in the Past 150 Years at Block 1")#
+legend(x = "topleft", legend = "Observed Data", col = "skyblue3", lwd = 2, inset = 0.05)
+plot(sst_150_ts[1600:1800,1], ylab = "Monthly SST", xlab = "Time", lwd = 2, col = 'skyblue3', main = "Sea Surface Temperature in the Past 150 Years at Block 1")#
+legend(x = "topleft", legend = "Observed Data", col = "skyblue3", lwd = 2, inset = 0.05)
+legend(x = "topleft", legend = "Observed Data", col = "skyblue3", lwd = 2, inset = 0.05)
+plot(sst_150_ts[1600:1800,1], type = "l", ylab = "Monthly SST", xlab = "Time", lwd = 2, col = 'skyblue3', main = "Sea Surface Temperature in the Past 150 Years at Block 1")#
+legend(x = "topleft", legend = "Observed Data", col = "skyblue3", lwd = 2, inset = 0.05)
+png("block_1_ts.png", width = 600, height = 600)#
+#
+plot(first_block, ylab = "Annually Average SST", xlab = "Time", lwd = 2, col = 'skyblue3', main = "Sea Surface Temperature in the Past 150 Years at Block 1")#
+abline(h = mean(first_block), col = "black", lwd = 2)#
+legend(x = "topleft", legend = "Seasonal Adj. Data", col = "skyblue3", lwd = 2, inset = 0.05)#
+#
+dev.off()
+png("block_1_ts_seasonal.jpg", width = 600, height = 600)#
+#
+plot(sst_150_ts[1600:1800,1], type = "l", ylab = "Monthly SST", xlab = "Time", lwd = 2, col = 'skyblue3', main = "Sea Surface Temperature in the Past 150 Years at Block 1")#
+legend(x = "topleft", legend = "Observed Data", col = "skyblue3", lwd = 2, inset = 0.05)#
+#
+dev.off()
+png("block_1_ts.png", width = 600, height = 600)#
+#
+plot(first_block, ylab = "Annually Average SST", xlab = "Time", lwd = 2, col = 'skyblue3', main = "Sea Surface Temperature in the Past 150 Years at Block 1")#
+legend(x = "topleft", legend = "Seasonal Adj. Data", col = "skyblue3", lwd = 2, inset = 0.05)#
+#
+dev.off()
+first_block = ts(annual_avg_sst[,1], start = 1870, end = 2019)
+library(tidyverse)#
+library(forecast)#
+library(stats)#
+library(tis)#
+library(trend)#
+library(tseries)#
+#
+sst_150 = read_csv("scot_sst_150.csv")#
+#
+sst_150_ts = ts(t(sst_150), start = c(1870,1), end = c(2019,12), freq = 12)#
+#
+sst_5_ts = ts(sst_150_ts[1741:1800,], start = c(2015,1), end = c(2019,12), freq = 12)#
+#
+first_block = ts(annual_avg_sst[,1], start = 1870, end = 2019)
+annual_avg_sst = read.csv("annual_avg_sst_150.csv", row.names = 1)
+#***************************************************************************#
+# Some TS plots of SST data in the past#
+# Dataset: #
+#		"scot_sst_150.csv"      	2020-2069  #
+# Author: Hao Jin#
+#***************************************************************************#
+library(tidyverse)#
+library(forecast)#
+library(stats)#
+library(tis)#
+library(trend)#
+library(tseries)#
+#
+sst_150 = read_csv("scot_sst_150.csv")#
+#
+sst_150_ts = ts(t(sst_150), start = c(1870,1), end = c(2019,12), freq = 12)#
+#
+sst_5_ts = ts(sst_150_ts[1741:1800,], start = c(2015,1), end = c(2019,12), freq = 12)#
+#
+annual_avg_sst = read.csv("annual_avg_sst_150.csv", row.names = 1)#
+#
+first_block = ts(annual_avg_sst[,1], start = 1870, end = 2019)#
+#
+# ------------------------- Time Series Plot, Trend ------------------------- ##
+#
+## ---------------- Plot 1 All Blocks, 150 Years, Monthly ---------------- ###
+#
+png("all_blocks_past_150.png", 1200, 600)#
+#
+ts.plot(sst_150_ts, col = "steelblue2", lwd = 0.5, main = "Monthly SST from 1870 to 2019 of All 300 Grids", cex.main = 2, cex.lab = 2)#
+#
+dev.off()#
+#
+## ------------------ Plot 2 All Block, 5 Years, Monthly ------------------ ###
+#
+png("all_blocks_past_5.png", 1200, 600)#
+#
+ts.plot(sst_5_ts, col = "steelblue2", lwd = 0.5, main = "Monthly SST from 2015 to 2019 of All 300 Grids", cex.main = 2, cex.lab = 2)#
+#
+dev.off()#
+## ----------------- Plot 3 Block 1, 150 Years, Annually ----------------- ###
+#
+png("block_1_ts.png", width = 600, height = 600)#
+#
+plot(first_block, ylab = "Annually Average SST", xlab = "Time", lwd = 2, col = 'skyblue3', main = "Sea Surface Temperature in the Past 150 Years at Block 1")#
+legend(x = "topleft", legend = "Seasonal Adj. Data", col = "skyblue3", lwd = 2, inset = 0.05)#
+#
+dev.off()#
+#
+## ------------------ Plot 4 block 1, 200 Months, Monthly ------------------ ###
+#
+png("block_1_ts_seasonal.jpg", width = 600, height = 600)#
+#
+plot(sst_150_ts[1600:1800,1], type = "l", ylab = "Monthly SST", xlab = "Time", lwd = 2, col = 'skyblue3', main = "Sea Surface Temperature in the Past 150 Years at Block 1")#
+legend(x = "topleft", legend = "Observed Data", col = "skyblue3", lwd = 2, inset = 0.05)#
+#
+dev.off()#
+## ------------- Plot 5 Trend, Block 1, 150 Years, Annually ------------- ###
+#
+# The null hypothesis for this test is that there is no monotonic trend in the series.#
+# The alternate hypothesis is that a trend exists. This trend can be positive, negative, or non-null.#
+#
+mk.test(first_block)#
+#
+t = seq(1870, 1870 + length(first_block)-1)#
+t1 = lm(first_block ~ t) #
+jpeg("block_1_trend.jpg", width = 600, height = 600)#
+#
+plot(first_block, ylab = "Annually Average SST", xlab = "Time", lwd = 2, col = 'skyblue3', main = "Sea Surface Temperature in the Past 150 Years at Block 1")#
+lines(t, t1$fit, col = "red3", lwd = 2)#
+legend(x = "topleft", legend = c("Observed Data", "Fitted Trend"), col = c("skyblue3", "red3"), lty = c(1,1), lwd = c(2,2), inset = 0.05)#
+#
+dev.off()#
+#
+## ------------- Plot 6 Detrend, First Block 150 Years, Annually ------------- ###
+#
+jpeg("block_1_stationary.jpg", width = 600, height = 600)#
+#
+plot(diff(first_block), ylab = "Annually Change of SST", xlab = "Time", lwd = 2, col = 'skyblue3', main = "Change of SST in the Past 150 Years at Block 1")#
+legend(x = "topleft", legend = "Detrended Data", col = "skyblue3", lwd = 2, inset = 0.05)#
+#
+dev.off()
