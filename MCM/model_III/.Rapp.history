@@ -1,0 +1,1376 @@
+library(tidyverse)#
+library('plot.matrix')#
+library(stringr)#
+library("viridis") #
+library(RColorBrewer)        #
+#
+forecast = read.csv("forecast_sst_50_t.csv", row.names = 1)
+bc_herr = read_csv("bc_herring.csv", col_names = TRUE)#
+years_of_interest = c(2019, 2029, 2039, 2049, 2059, 2069)#
+years_col = years_of_interest - 2019 + 2#
+#
+for (n in years_col){#
+	# Create empty vectors to store location (lat,lon) info#
+	latitude <- numeric(100)#
+	longitude <- numeric(100)#
+#
+	for (i in seq_len(100)) {#
+		xy <- str_split(bc_herr[i,n], " ")#
+		latitude[i] <- as.numeric(xy[[1]][1])#
+		longitude[i] <- as.numeric(xy[[1]][2])#
+	}#
+#
+	# Create empty vectors to store location (row,col) info#
+	row_num <- numeric(100)#
+	col_num <- numeric(100)#
+#
+	for (i in seq_len(100)) {#
+		row_num[i] = 62.5 - latitude[i] + 1#
+		col_num[i] = longitude[i] + 16.5 + 1#
+	}#
+#
+	# Create empty vectors to store location (block number) info#
+#
+	# Up to down, left to right#
+	# First block: 62.5, -16.5#
+	# 300th block: 48.5, 2.5#
+	num <- numeric(100)#
+#
+	for (i in seq_len(100)) {#
+		num[i] = 20 * row_num[i] + col_num[i]#
+	}#
+#
+	table(num)#
+#
+	# Create empty vectors to count ending block number#
+	counter = numeric(300)#
+#
+	# Mark Land#
+	for (i in seq_len(300)) {#
+		if(is.na(forecast[i,11]))#
+		counter[i] = NA#
+	}#
+#
+	for (block in num) {#
+		counter[block] = counter[block] + 1#
+	}#
+#
+	# Convert counter to matrix form to be visualized on map#
+	loc_counter = matrix(counter, nrow = 15, ncol = 20, byrow = TRUE)#
+#
+	colnames(loc_counter) = seq(-16.5, 2.5, 1)#
+	rownames(loc_counter) = seq(62.5, 48.5, -1)#
+#
+	# Visualize#
+	file = paste("bch_map_20", n+17, ".png", sep = "")#
+	main = paste( "The Mostly Likely Location for Herring in 20", n+17, ", Best Case", sep = "")#
+	png(file, 610, 541)#
+	par(mar = c(5, 5, 5, 5)) # Set the margin on all sides to 5#
+	plot(loc_counter, xlab = "Longitude", ylab = 'Latitude', #
+	main = main, #
+	fmt.cell = '%d', col = plasma(20))#
+	dev.off()#
+}
+forecast = read.csv("forecast_sst_50_t.csv", row.names = 1)
+bc_herr = read_csv("bc_herring.csv", col_names = TRUE)#
+years_of_interest = c(2019, 2029, 2039, 2049, 2059, 2069)#
+years_col = years_of_interest - 2019 + 2#
+#
+for (n in years_col){#
+	# Create empty vectors to store location (lat,lon) info#
+	latitude <- numeric(100)#
+	longitude <- numeric(100)#
+#
+	for (i in seq_len(100)) {#
+		xy <- str_split(bc_herr[i,n], " ")#
+		latitude[i] <- as.numeric(xy[[1]][1])#
+		longitude[i] <- as.numeric(xy[[1]][2])#
+	}#
+#
+	# Create empty vectors to store location (row,col) info#
+	row_num <- numeric(100)#
+	col_num <- numeric(100)#
+#
+	for (i in seq_len(100)) {#
+		row_num[i] = 62.5 - latitude[i] + 1#
+		col_num[i] = longitude[i] + 16.5 + 1#
+	}#
+#
+	# Create empty vectors to store location (block number) info#
+#
+	# Up to down, left to right#
+	# First block: 62.5, -16.5#
+	# 300th block: 48.5, 2.5#
+	num <- numeric(100)#
+#
+	for (i in seq_len(100)) {#
+		num[i] = 20 * row_num[i] + col_num[i]#
+	}#
+#
+	table(num)#
+#
+	# Create empty vectors to count ending block number#
+	counter = numeric(300)#
+#
+	# Mark Land#
+	for (i in seq_len(300)) {#
+		if(is.na(forecast[i,11]))#
+		counter[i] = NA#
+	}#
+#
+	for (block in num) {#
+		counter[block] = counter[block] + 1#
+	}#
+#
+	# Convert counter to matrix form to be visualized on map#
+	loc_counter = matrix(counter, nrow = 15, ncol = 20, byrow = TRUE)#
+#
+	colnames(loc_counter) = seq(-16.5, 2.5, 1)#
+	rownames(loc_counter) = seq(62.5, 48.5, -1)#
+#
+	# Visualize#
+	file = paste("bch_map_20", n+17, ".png", sep = "")#
+	main = paste( "The Mostly Likely Location for Herring in 20", n+17, ", Best Case", sep = "")#
+	png(file, 610, 541)#
+	par(mar = c(5, 5, 5, 5)) # Set the margin on all sides to 5#
+	plot(loc_counter, xlab = "Longitude", ylab = 'Latitude', #
+	main = main, #
+	fmt.cell = '%d', col = plasma(20))#
+	dev.off()#
+}
+library(tidyverse)#
+library('plot.matrix')#
+library(stringr)#
+library("viridis") #
+library(RColorBrewer)  #
+#
+bc_herr = read_csv("bc_herring.csv", col_names = TRUE)#
+bc_mack = read_csv("bc_mackerel.csv", col_names = TRUE)
+dim(bc_herr)
+years_col
+years_of_interest = seq(2019, 2069)#
+years_col = years_of_interest - 2019 + 2
+years_col
+years_col = [1,2,5]
+years_col = [[1,2,5]]
+years_col[1,2,5]
+years_col[c(1,2,5)]
+current = numeric(51)#
+#
+for (n in years_col){#
+	# Create empty vectors to store location (lat,lon) info#
+	latitude <- numeric(100)#
+	longitude <- numeric(100)#
+#
+	for (i in seq_len(100)) {#
+		xy <- str_split(bc_herr[i,n], " ")#
+		latitude[i] <- as.numeric(xy[[1]][1])#
+		longitude[i] <- as.numeric(xy[[1]][2])#
+	}#
+#
+	# Create empty vectors to store location (row,col) info#
+	row_num <- numeric(100)#
+	col_num <- numeric(100)#
+#
+	for (i in seq_len(100)) {#
+		row_num[i] = 62.5 - latitude[i] + 1#
+		col_num[i] = longitude[i] + 16.5 + 1#
+	}#
+#
+	# Create empty vectors to store location (block number) info#
+#
+	# Up to down, left to right#
+	# First block: 62.5, -16.5#
+	# 300th block: 48.5, 2.5#
+	num <- numeric(100)#
+#
+	for (i in seq_len(100)) {#
+		num[i] = 20 * row_num[i] + col_num[i]#
+	}#
+#
+	table(num)#
+#
+	# Create empty vectors to count ending block number#
+	counter = numeric(300)#
+#
+	# Mark Land#
+	for (i in seq_len(300)) {#
+		if(is.na(forecast[i,11]))#
+		counter[i] = NA#
+	}#
+#
+	for (block in num) {#
+		counter[block] = counter[block] + 1#
+	}#
+	current[n-1] = sum(counter[c(	95,  	96,  	97,  #
+									115, 	116, 	117,  #
+											136, 	137,  #
+													157)])#
+}
+forecast = read.csv("forecast_sst_50_t.csv", row.names = 1)
+for (n in years_col){#
+	# Create empty vectors to store location (lat,lon) info#
+	latitude <- numeric(100)#
+	longitude <- numeric(100)#
+#
+	for (i in seq_len(100)) {#
+		xy <- str_split(bc_herr[i,n], " ")#
+		latitude[i] <- as.numeric(xy[[1]][1])#
+		longitude[i] <- as.numeric(xy[[1]][2])#
+	}#
+#
+	# Create empty vectors to store location (row,col) info#
+	row_num <- numeric(100)#
+	col_num <- numeric(100)#
+#
+	for (i in seq_len(100)) {#
+		row_num[i] = 62.5 - latitude[i] + 1#
+		col_num[i] = longitude[i] + 16.5 + 1#
+	}#
+#
+	# Create empty vectors to store location (block number) info#
+#
+	# Up to down, left to right#
+	# First block: 62.5, -16.5#
+	# 300th block: 48.5, 2.5#
+	num <- numeric(100)#
+#
+	for (i in seq_len(100)) {#
+		num[i] = 20 * row_num[i] + col_num[i]#
+	}#
+#
+	table(num)#
+#
+	# Create empty vectors to count ending block number#
+	counter = numeric(300)#
+#
+	# Mark Land#
+	for (i in seq_len(300)) {#
+		if(is.na(forecast[i,11]))#
+		counter[i] = NA#
+	}#
+#
+	for (block in num) {#
+		counter[block] = counter[block] + 1#
+	}#
+	current[n-1] = sum(counter[c(	95,  	96,  	97,  #
+									115, 	116, 	117,  #
+											136, 	137,  #
+													157)])#
+}
+current
+current[c(1,11,21,31,41,51)]
+years_of_interest = seq(2019, 2069)#
+years_col = years_of_interest - 2019 + 2#
+#
+current_herr = numeric(51)#
+new_boat_herr = numeric(51)#
+move_south_herr = numeric(51)#
+move_north_herr = numeric(51)#
+#
+for (n in years_col){#
+	# Create empty vectors to store location (lat,lon) info#
+	latitude <- numeric(100)#
+	longitude <- numeric(100)#
+#
+	for (i in seq_len(100)) {#
+		xy <- str_split(bc_herr[i,n], " ")#
+		latitude[i] <- as.numeric(xy[[1]][1])#
+		longitude[i] <- as.numeric(xy[[1]][2])#
+	}#
+#
+	# Create empty vectors to store location (row,col) info#
+	row_num <- numeric(100)#
+	col_num <- numeric(100)#
+#
+	for (i in seq_len(100)) {#
+		row_num[i] = 62.5 - latitude[i] + 1#
+		col_num[i] = longitude[i] + 16.5 + 1#
+	}#
+#
+	# Create empty vectors to store location (block number) info#
+#
+	# Up to down, left to right#
+	# First block: 62.5, -16.5#
+	# 300th block: 48.5, 2.5#
+	num <- numeric(100)#
+#
+	for (i in seq_len(100)) {#
+		num[i] = 20 * row_num[i] + col_num[i]#
+	}#
+#
+	table(num)#
+#
+	# Create empty vectors to count ending block number#
+	counter = numeric(300)#
+#
+	# Mark Land#
+	for (i in seq_len(300)) {#
+		if(is.na(forecast[i,11]))#
+		counter[i] = NA#
+	}#
+#
+	for (block in num) {#
+		counter[block] = counter[block] + 1#
+	}#
+	current_herr[n-1] = sum(counter[c(	95, 96, 97,  #
+										115,116,117,  #
+											136,137,  #
+												157)])#
+	new_boat_herr[n-1] = sum(counter[c(	53, 54, 55, 56, 57, 58, 59,#
+										73, 74, 75, 76, 77, 78, 79,#
+										    94, 95, 96, 97, 98, 99,#
+										        115,116,117,118,119,#
+										            136,137,138,139,#
+										                157,158,159,#
+										                    178,179,#
+										                        199)])#
+}
+new_boat_herr
+for (n in years_col){#
+	# Create empty vectors to store location (lat,lon) info#
+	latitude <- numeric(100)#
+	longitude <- numeric(100)#
+#
+	for (i in seq_len(100)) {#
+		xy <- str_split(bc_herr[i,n], " ")#
+		latitude[i] <- as.numeric(xy[[1]][1])#
+		longitude[i] <- as.numeric(xy[[1]][2])#
+	}#
+#
+	# Create empty vectors to store location (row,col) info#
+	row_num <- numeric(100)#
+	col_num <- numeric(100)#
+#
+	for (i in seq_len(100)) {#
+		row_num[i] = 62.5 - latitude[i] + 1#
+		col_num[i] = longitude[i] + 16.5 + 1#
+	}#
+#
+	# Create empty vectors to store location (block number) info#
+#
+	# Up to down, left to right#
+	# First block: 62.5, -16.5#
+	# 300th block: 48.5, 2.5#
+	num <- numeric(100)#
+#
+	for (i in seq_len(100)) {#
+		num[i] = 20 * row_num[i] + col_num[i]#
+	}#
+#
+	table(num)#
+#
+	# Create empty vectors to count ending block number#
+	counter = numeric(300)#
+#
+	# Mark Land#
+	for (i in seq_len(300)) {#
+		if(is.na(forecast[i,11]))#
+		counter[i] = NA#
+	}#
+#
+	for (block in num) {#
+		counter[block] = counter[block] + 1#
+	}#
+	current_herr[n-1] = sum(counter[c(	95, 96, 97,  #
+										115,116,117,  #
+											136,137,  #
+												157)])#
+	new_boat_herr[n-1] = sum(counter[c(	53, 54, 55, 56, 57, 58, 59,#
+										73, 74, 75, 76, 77, 78, 79,#
+										    94, 95, 96, 97, 98, 99,#
+										        115,116,117,118,119,#
+										            136,137,138,139,#
+										                157,158,159,#
+										                    178,179,#
+										                        199)])#
+	move_south_herr[n-1] = sum(counter[c( 137,138,139,  #
+										  157,158,159,#
+										  177,178,179,#
+										          199)])
+}
+move_south_herr
+new_boat_herr
+years_of_interest = seq(2019, 2069)#
+years_col = years_of_interest - 2019 + 2#
+#
+current_herr = numeric(51)#
+new_boat_herr = numeric(51)#
+move_south_herr = numeric(51)#
+move_north_herr = numeric(51)#
+#
+for (n in years_col){#
+	# Create empty vectors to store location (lat,lon) info#
+	latitude <- numeric(100)#
+	longitude <- numeric(100)#
+#
+	for (i in seq_len(100)) {#
+		xy <- str_split(bc_herr[i,n], " ")#
+		latitude[i] <- as.numeric(xy[[1]][1])#
+		longitude[i] <- as.numeric(xy[[1]][2])#
+	}#
+#
+	# Create empty vectors to store location (row,col) info#
+	row_num <- numeric(100)#
+	col_num <- numeric(100)#
+#
+	for (i in seq_len(100)) {#
+		row_num[i] = 62.5 - latitude[i] + 1#
+		col_num[i] = longitude[i] + 16.5 + 1#
+	}#
+#
+	# Create empty vectors to store location (block number) info#
+#
+	# Up to down, left to right#
+	# First block: 62.5, -16.5#
+	# 300th block: 48.5, 2.5#
+	num <- numeric(100)#
+#
+	for (i in seq_len(100)) {#
+		num[i] = 20 * row_num[i] + col_num[i]#
+	}#
+#
+	table(num)#
+#
+	# Create empty vectors to count ending block number#
+	counter = numeric(300)#
+#
+	# Mark Land#
+	for (i in seq_len(300)) {#
+		if(is.na(forecast[i,11]))#
+		counter[i] = NA#
+	}#
+#
+	for (block in num) {#
+		counter[block] = counter[block] + 1#
+	}#
+	current_herr[n-1] = sum(counter[c(	95, 96, 97,  #
+										115,116,117,  #
+											136,137,  #
+												157)])#
+	new_boat_herr[n-1] = sum(counter[c(	53, 54, 55, 56, 57, 58, 59,#
+										73, 74, 75, 76, 77, 78, 79,#
+										    94, 95, 96, 97, 98, 99,#
+										        115,116,117,118,119,#
+										            136,137,138,139,#
+										                157,158,159,#
+										                    178,179,#
+										                        199)])#
+	move_south_herr[n-1] = sum(counter[c( 137,138,139,  #
+										  157,158,159,#
+										      178,179,#
+										          199)])#
+}
+move_south_herr
+years_of_interest = seq(2019, 2069)#
+years_col = years_of_interest - 2019 + 2#
+#
+current_herr = numeric(51)#
+new_boat_herr = numeric(51)#
+move_south_herr = numeric(51)#
+move_north_herr = numeric(51)#
+#
+for (n in years_col){#
+	# Create empty vectors to store location (lat,lon) info#
+	latitude <- numeric(100)#
+	longitude <- numeric(100)#
+#
+	for (i in seq_len(100)) {#
+		xy <- str_split(bc_herr[i,n], " ")#
+		latitude[i] <- as.numeric(xy[[1]][1])#
+		longitude[i] <- as.numeric(xy[[1]][2])#
+	}#
+#
+	# Create empty vectors to store location (row,col) info#
+	row_num <- numeric(100)#
+	col_num <- numeric(100)#
+#
+	for (i in seq_len(100)) {#
+		row_num[i] = 62.5 - latitude[i] + 1#
+		col_num[i] = longitude[i] + 16.5 + 1#
+	}#
+#
+	# Create empty vectors to store location (block number) info#
+#
+	# Up to down, left to right#
+	# First block: 62.5, -16.5#
+	# 300th block: 48.5, 2.5#
+	num <- numeric(100)#
+#
+	for (i in seq_len(100)) {#
+		num[i] = 20 * row_num[i] + col_num[i]#
+	}#
+#
+	table(num)#
+#
+	# Create empty vectors to count ending block number#
+	counter = numeric(300)#
+#
+	# Mark Land#
+	for (i in seq_len(300)) {#
+		if(is.na(forecast[i,11]))#
+		counter[i] = NA#
+	}#
+#
+	for (block in num) {#
+		counter[block] = counter[block] + 1#
+	}#
+	current_herr[n-1] = sum(counter[c(	95, 96, 97,  #
+										115,116,117,  #
+											136,137,  #
+												157)])#
+	new_boat_herr[n-1] = sum(counter[c(	53, 54, 55, 56, 57, 58, 59,#
+										73, 74, 75, 76, 77, 78, 79,#
+										    94, 95, 96, 97, 98, 99,#
+										        115,116,117,118,119,#
+										            136,137,138,139,#
+										                157,158,159,#
+										                    178,179,#
+										                        199)])#
+	move_south_herr[n-1] = sum(counter[c( 137,138,139,  #
+										  157,158,159,#
+										      178,179,#
+										          199)])#
+	move_north_herr[n-1] = sum(counter[c( 74, 75, 76,#
+										  94, 95, 96,#
+										      115,116,#
+										          136)])									#
+}#
+#
+current_herr#
+new_boat_herr#
+move_south_herr#
+move_north_herr
+q_herr = data.frame("current" = current_herr, #
+					"new boat" = new_boat_herr, #
+					"move north" = move_south_herr, #
+					"move_south" = move_north_herr)
+q_herr
+write.csv(q_herr, "q_herring.csv")
+rownames(q_herr) = seq(2019,2069)
+write.csv(q_herr, "q_herring.csv")
+years_of_interest = seq(2019, 2069)#
+years_col = years_of_interest - 2019 + 2#
+#
+current_mack = numeric(51)#
+new_boat_mack = numeric(51)#
+move_south_mack = numeric(51)#
+move_north_mack = numeric(51)#
+#
+for (n in years_col){#
+	# Create empty vectors to store location (lat,lon) info#
+	latitude <- numeric(100)#
+	longitude <- numeric(100)#
+#
+	for (i in seq_len(100)) {#
+		xy <- str_split(bc_mack[i,n], " ")#
+		latitude[i] <- as.numeric(xy[[1]][1])#
+		longitude[i] <- as.numeric(xy[[1]][2])#
+	}#
+#
+	# Create empty vectors to store location (row,col) info#
+	row_num <- numeric(100)#
+	col_num <- numeric(100)#
+#
+	for (i in seq_len(100)) {#
+		row_num[i] = 62.5 - latitude[i] + 1#
+		col_num[i] = longitude[i] + 16.5 + 1#
+	}#
+#
+	# Create empty vectors to store location (block number) info#
+#
+	# Up to down, left to right#
+	# First block: 62.5, -16.5#
+	# 300th block: 48.5, 2.5#
+	num <- numeric(100)#
+#
+	for (i in seq_len(100)) {#
+		num[i] = 20 * row_num[i] + col_num[i]#
+	}#
+#
+	table(num)#
+#
+	# Create empty vectors to count ending block number#
+	counter = numeric(300)#
+#
+	# Mark Land#
+	for (i in seq_len(300)) {#
+		if(is.na(forecast[i,11]))#
+		counter[i] = NA#
+	}#
+#
+	for (block in num) {#
+		counter[block] = counter[block] + 1#
+	}#
+	current_mack[n-1] = sum(counter[c(	95, 96, 97,  #
+										115,116,117,  #
+											136,137,  #
+												157)])#
+	new_boat_mack[n-1] = sum(counter[c(	53, 54, 55, 56, 57, 58, 59,#
+										73, 74, 75, 76, 77, 78, 79,#
+										    94, 95, 96, 97, 98, 99,#
+										        115,116,117,118,119,#
+										            136,137,138,139,#
+										                157,158,159,#
+										                    178,179,#
+										                        199)])#
+	move_south_mack[n-1] = sum(counter[c( 137,138,139,  #
+										  157,158,159,#
+										      178,179,#
+										          199)])#
+	move_north_mack[n-1] = sum(counter[c( 74, 75, 76,#
+										  94, 95, 96,#
+										      115,116,#
+										          136)])									#
+}#
+#
+current_mack#
+new_boat_mack#
+move_south_mack#
+move_north_mack#
+#
+q_mack = data.frame("current" = current_mack, #
+					"new boat" = new_boat_mack, #
+					"move north" = move_south_mack, #
+					"move_south" = move_north_mack)  #
+#
+rownames(q_mack) = seq(2019,2069)					#
+write.csv(q_mack, "q_mackerel.csv")
+library(tidyverse)#
+library('plot.matrix')#
+library(stringr)#
+library("viridis") #
+library(RColorBrewer)  #
+#
+forecast = read.csv("forecast_sst_50_t.csv", row.names = 1)#
+bc_herr = read_csv("bc_herring.csv", col_names = TRUE)#
+bc_mack = read_csv("bc_mackerel.csv", col_names = TRUE)
+15,116#
+#         136#
+# ------------------------------------------ Herring ------------------------------------------ ##
+#
+years_of_interest = seq(2019, 2069)#
+years_col = years_of_interest - 2019 + 2#
+#
+current_herr = numeric(51)#
+new_boat_herr = numeric(51)#
+move_south_herr = numeric(51)#
+move_north_herr = numeric(51)#
+#
+for (n in years_col){#
+	# Create empty vectors to store location (lat,lon) info#
+	latitude <- numeric(100)#
+	longitude <- numeric(100)#
+#
+	for (i in seq_len(100)) {#
+		xy <- str_split(bc_herr[i,n], " ")#
+		latitude[i] <- as.numeric(xy[[1]][1])#
+		longitude[i] <- as.numeric(xy[[1]][2])#
+	}#
+#
+	# Create empty vectors to store location (row,col) info#
+	row_num <- numeric(100)#
+	col_num <- numeric(100)#
+#
+	for (i in seq_len(100)) {#
+		row_num[i] = 62.5 - latitude[i] + 1#
+		col_num[i] = longitude[i] + 16.5 + 1#
+	}#
+#
+	# Create empty vectors to store location (block number) info#
+#
+	# Up to down, left to right#
+	# First block: 62.5, -16.5#
+	# 300th block: 48.5, 2.5#
+	num <- numeric(100)#
+#
+	for (i in seq_len(100)) {#
+		num[i] = 20 * row_num[i] + col_num[i]#
+	}#
+#
+	table(num)#
+#
+	# Create empty vectors to count ending block number#
+	counter = numeric(300)#
+#
+	# Mark Land#
+	for (i in seq_len(300)) {#
+		if(is.na(forecast[i,11]))#
+		counter[i] = NA#
+	}#
+#
+	for (block in num) {#
+		counter[block] = counter[block] + 1#
+	}#
+	current_herr[n-1] = sum(counter[c(	95, 96, 97,  #
+										115,116,117,  #
+											136,137,  #
+												157)])#
+	new_boat_herr[n-1] = sum(counter[c(	53, 54, 55, 56, 57, 58, 59,#
+										73, 74, 75, 76, 77, 78, 79,#
+										    94, 95, 96, 97, 98, 99,#
+										        115,116,117,118,119,#
+										            136,137,138,139,#
+										                157,158,159,#
+										                    178,179,#
+										                        199)])#
+	move_south_herr[n-1] = sum(counter[c( 137,138,139,  #
+										  157,158,159,#
+										      178,179,#
+										          199)])#
+	move_north_herr[n-1] = sum(counter[c( 74, 75, 76,#
+										  94, 95, 96,#
+										      115,116,#
+										          136)])									#
+}#
+#
+current_herr#
+new_boat_herr#
+move_south_herr#
+move_north_herr
+years_of_interest = seq(2019, 2069)#
+years_col = years_of_interest - 2019 + 2#
+#
+current_mack = numeric(51)#
+new_boat_mack = numeric(51)#
+move_south_mack = numeric(51)#
+move_north_mack = numeric(51)#
+#
+for (n in years_col){#
+	# Create empty vectors to store location (lat,lon) info#
+	latitude <- numeric(100)#
+	longitude <- numeric(100)#
+#
+	for (i in seq_len(100)) {#
+		xy <- str_split(bc_mack[i,n], " ")#
+		latitude[i] <- as.numeric(xy[[1]][1])#
+		longitude[i] <- as.numeric(xy[[1]][2])#
+	}#
+#
+	# Create empty vectors to store location (row,col) info#
+	row_num <- numeric(100)#
+	col_num <- numeric(100)#
+#
+	for (i in seq_len(100)) {#
+		row_num[i] = 62.5 - latitude[i] + 1#
+		col_num[i] = longitude[i] + 16.5 + 1#
+	}#
+#
+	# Create empty vectors to store location (block number) info#
+#
+	# Up to down, left to right#
+	# First block: 62.5, -16.5#
+	# 300th block: 48.5, 2.5#
+	num <- numeric(100)#
+#
+	for (i in seq_len(100)) {#
+		num[i] = 20 * row_num[i] + col_num[i]#
+	}#
+#
+	table(num)#
+#
+	# Create empty vectors to count ending block number#
+	counter = numeric(300)#
+#
+	# Mark Land#
+	for (i in seq_len(300)) {#
+		if(is.na(forecast[i,11]))#
+		counter[i] = NA#
+	}#
+#
+	for (block in num) {#
+		counter[block] = counter[block] + 1#
+	}#
+	current_mack[n-1] = sum(counter[c(	95, 96, 97,  #
+										115,116,117,  #
+											136,137,  #
+												157)])#
+	new_boat_mack[n-1] = sum(counter[c(	53, 54, 55, 56, 57, 58, 59,#
+										73, 74, 75, 76, 77, 78, 79,#
+										    94, 95, 96, 97, 98, 99,#
+										        115,116,117,118,119,#
+										            136,137,138,139,#
+										                157,158,159,#
+										                    178,179,#
+										                        199)])#
+	move_south_mack[n-1] = sum(counter[c( 137,138,139,  #
+										  157,158,159,#
+										      178,179,#
+										          199)])#
+	move_north_mack[n-1] = sum(counter[c( 74, 75, 76,#
+										  94, 95, 96,#
+										      115,116,#
+										          136)])									#
+}#
+#
+current_mack#
+new_boat_mack#
+move_south_mack#
+move_north_mack
+bc_mack = read_csv("bc_mackerel.csv", col_names = TRUE)
+current_mack
+new_boat_herr
+new_boat_mack
+move_north_mack
+library(tidyverse)#
+library('plot.matrix')#
+library(stringr)#
+library("viridis") #
+library(RColorBrewer)        #
+#
+forecast = read.csv("forecast_sst_50_t.csv", row.names = 1)
+bc_mack = read_csv("bc_mackerel.csv", col_names = TRUE)
+bc_mack = read_csv("bc_mackerel.csv", col_names = TRUE)#
+years_of_interest = c(2020, 2021)#
+years_col = years_of_interest - 2019 + 2#
+#
+for (n in years_col){#
+	# Create empty vectors to store location (lat,lon) info#
+	latitude <- numeric(100)#
+	longitude <- numeric(100)#
+#
+	for (i in seq_len(100)) {#
+		xy <- str_split(bc_mack[i,n], " ")#
+		latitude[i] <- as.numeric(xy[[1]][1])#
+		longitude[i] <- as.numeric(xy[[1]][2])#
+	}#
+#
+	# Create empty vectors to store location (row,col) info#
+	row_num <- numeric(100)#
+	col_num <- numeric(100)#
+#
+	for (i in seq_len(100)) {#
+		row_num[i] = 62.5 - latitude[i] + 1#
+		col_num[i] = longitude[i] + 16.5 + 1#
+	}#
+#
+	# Create empty vectors to store location (block number) info#
+#
+	# Up to down, left to right#
+	# First block: 62.5, -16.5#
+	# 300th block: 48.5, 2.5#
+	num <- numeric(100)#
+#
+	for (i in seq_len(100)) {#
+		num[i] = 20 * row_num[i] + col_num[i]#
+	}#
+#
+	table(num)#
+#
+	# Create empty vectors to count ending block number#
+	counter = numeric(300)#
+#
+	# Mark Land#
+	for (i in seq_len(300)) {#
+		if(is.na(forecast[i,11]))#
+		counter[i] = NA#
+	}#
+#
+	for (block in num) {#
+		counter[block] = counter[block] + 1#
+	}#
+#
+	# Convert counter to matrix form to be visualized on map#
+	loc_counter = matrix(counter, nrow = 15, ncol = 20, byrow = TRUE)#
+#
+	colnames(loc_counter) = seq(-16.5, 2.5, 1)#
+	rownames(loc_counter) = seq(62.5, 48.5, -1)#
+#
+	# Visualize#
+	file = paste("bcm_map_20", n+17, ".png", sep = "")#
+	main = paste( "The Mostly Likely Location for Mackerel in 20", n+17, ", Best Case", sep = "")#
+	png(file, 610, 541)#
+	par(mar = c(5, 5, 5, 5))#
+	plot(loc_counter, xlab = "Longitude", ylab = 'Latitude', #
+	main = main, #
+	fmt.cell = '%d', col = plasma(20))#
+	dev.off()#
+}
+forecast = read.csv("forecast_sst_50_t.csv", row.names = 1)#
+bc_herr = read_csv("bc_herring.csv", col_names = TRUE)#
+bc_mack = read_csv("bc_mackerel.csv", col_names = TRUE)
+years_of_interest = seq(2019, 2069)#
+years_col = years_of_interest - 2019 + 2#
+#
+current_mack = numeric(51)#
+new_boat_mack = numeric(51)#
+move_south_mack = numeric(51)#
+move_north_mack = numeric(51)#
+#
+for (n in years_col){#
+	# Create empty vectors to store location (lat,lon) info#
+	latitude <- numeric(100)#
+	longitude <- numeric(100)#
+#
+	for (i in seq_len(100)) {#
+		xy <- str_split(bc_mack[i,n], " ")#
+		latitude[i] <- as.numeric(xy[[1]][1])#
+		longitude[i] <- as.numeric(xy[[1]][2])#
+	}#
+#
+	# Create empty vectors to store location (row,col) info#
+	row_num <- numeric(100)#
+	col_num <- numeric(100)#
+#
+	for (i in seq_len(100)) {#
+		row_num[i] = 62.5 - latitude[i] + 1#
+		col_num[i] = longitude[i] + 16.5 + 1#
+	}#
+#
+	# Create empty vectors to store location (block number) info#
+#
+	# Up to down, left to right#
+	# First block: 62.5, -16.5#
+	# 300th block: 48.5, 2.5#
+	num <- numeric(100)#
+#
+	for (i in seq_len(100)) {#
+		num[i] = 20 * row_num[i] + col_num[i]#
+	}#
+#
+	table(num)#
+#
+	# Create empty vectors to count ending block number#
+	counter = numeric(300)#
+#
+	# Mark Land#
+	for (i in seq_len(300)) {#
+		if(is.na(forecast[i,11]))#
+		counter[i] = NA#
+	}#
+#
+	for (block in num) {#
+		counter[block] = counter[block] + 1#
+	}#
+	current_mack[n-1] = sum(counter[c(	95, 96, 97,  #
+										115,116,117,  #
+											136,137,  #
+												157)])#
+	new_boat_mack[n-1] = sum(counter[c(	53, 54, 55, 56, 57, 58, 59,#
+										73, 74, 75, 76, 77, 78, 79,#
+										    94, 95, 96, 97, 98, 99,#
+										        115,116,117,118,119,#
+										            136,137,138,139,#
+										                157,158,159,#
+										                    178,179,#
+										                        199)])#
+	move_south_mack[n-1] = sum(counter[c( 137,138,139,  #
+										  157,158,159,#
+										      178,179,#
+										          199)])#
+	move_north_mack[n-1] = sum(counter[c( 74, 75, 76,#
+										  94, 95, 96,#
+										      115,116,#
+										          136)])									#
+}#
+#
+current_mack#
+new_boat_mack#
+move_south_mack#
+move_north_mack
+q_mack = data.frame("current" = current_mack, #
+					"new boat" = new_boat_mack, #
+					"move north" = move_south_mack, #
+					"move_south" = move_north_mack)  #
+#
+rownames(q_mack) = seq(2019,2069)					#
+write.csv(q_mack, "q_mackerel.csv")
+#***************************************************************************#
+# Computing Fish Density q USING OLD STARTING POINT #
+# *Int.waters taken into acount*#
+# Dataset: #
+#		"forecast_sst_50.csv"      		2020-2069#
+#		"bc_herring.csv"      end coordinates of best case herring#
+#		"bc_mackerel.csv"     end coordinates of best case mackerel   #
+# Author: Hao Jin#
+#***************************************************************************#
+#
+library(tidyverse)#
+library('plot.matrix')#
+library(stringr)#
+library("viridis") #
+library(RColorBrewer)  #
+#
+forecast = read.csv("forecast_sst_50_t.csv", row.names = 1)#
+bc_herr = read_csv("bc_herring.csv", col_names = TRUE)#
+bc_mack = read_csv("bc_mackerel.csv", col_names = TRUE)#
+#
+# Current fishing port, old fishing boat covers#
+# 95,  96,  97, #
+# 115, 116, 117, #
+#      136, 137#
+#			157#
+#
+# Current fishing port, new fishing boat covers#
+#     54, 55, 56, 57, 58, 59 #
+# 73, 74, 75, 76, 77, 78, 79#
+#     94, 95, 96, 97, 98, 99#
+#		  115,116,117,118#
+#			  136,137,138,139#
+#			  	  157,158,159#
+#				      178,179#
+#						  199#
+#
+# Move south, old fishing boat covers#
+# 137,138,139#
+# 157,158,159#
+# 	  178,179#
+#		  199#
+#
+# Move south, old fishing boat covers#
+# 74, 75, 76#
+# 94, 95, 96#
+# 114,115,116#
+#         136#
+# ------------------------------------------ Herring ------------------------------------------ ##
+#
+years_of_interest = seq(2019, 2069)#
+years_col = years_of_interest - 2019 + 2#
+#
+current_herr = numeric(51)#
+new_boat_herr = numeric(51)#
+move_south_herr = numeric(51)#
+move_north_herr = numeric(51)#
+#
+for (n in years_col){#
+	# Create empty vectors to store location (lat,lon) info#
+	latitude <- numeric(100)#
+	longitude <- numeric(100)#
+#
+	for (i in seq_len(100)) {#
+		xy <- str_split(bc_herr[i,n], " ")#
+		latitude[i] <- as.numeric(xy[[1]][1])#
+		longitude[i] <- as.numeric(xy[[1]][2])#
+	}#
+#
+	# Create empty vectors to store location (row,col) info#
+	row_num <- numeric(100)#
+	col_num <- numeric(100)#
+#
+	for (i in seq_len(100)) {#
+		row_num[i] = 62.5 - latitude[i] + 1#
+		col_num[i] = longitude[i] + 16.5 + 1#
+	}#
+#
+	# Create empty vectors to store location (block number) info#
+#
+	# Up to down, left to right#
+	# First block: 62.5, -16.5#
+	# 300th block: 48.5, 2.5#
+	num <- numeric(100)#
+#
+	for (i in seq_len(100)) {#
+		num[i] = 20 * row_num[i] + col_num[i]#
+	}#
+#
+	table(num)#
+#
+	# Create empty vectors to count ending block number#
+	counter = numeric(300)#
+#
+	# Mark Land#
+	for (i in seq_len(300)) {#
+		if(is.na(forecast[i,11]))#
+		counter[i] = NA#
+	}#
+#
+	for (block in num) {#
+		counter[block] = counter[block] + 1#
+	}#
+	current_herr[n-1] = sum(counter[c(	95, 96, 97,  #
+										115,116,117,  #
+											136,137,  #
+												157)])#
+	new_boat_herr[n-1] = sum(counter[c(	    54, 55, 56, 57, 58, 59,#
+										73, 74, 75, 76, 77, 78, 79,#
+										    94, 95, 96, 97, 98, 99,#
+										        115,116,117,118,#
+										            136,137,138,139,#
+										                157,158,159,#
+										                    178,179,#
+										                        199)])#
+	move_south_herr[n-1] = sum(counter[c( 137,138,139,  #
+										  157,158,159,#
+										      178,179,#
+										          199)])#
+	move_north_herr[n-1] = sum(counter[c( 74, 75, 76,#
+										  94, 95, 96,#
+										      115,116,#
+										          136)])									#
+}#
+#
+current_herr#
+new_boat_herr#
+move_south_herr#
+move_north_herr#
+#
+q_herr = data.frame("current" = current_herr, #
+					"new boat" = new_boat_herr, #
+					"move north" = move_south_herr, #
+					"move_south" = move_north_herr)  #
+#
+rownames(q_herr) = seq(2019,2069)					#
+write.csv(q_herr, "q_herring_int_water.csv")#
+# ------------------------------------------ Mackerel ------------------------------------------ ##
+#
+years_of_interest = seq(2019, 2069)#
+years_col = years_of_interest - 2019 + 2#
+#
+current_mack = numeric(51)#
+new_boat_mack = numeric(51)#
+move_south_mack = numeric(51)#
+move_north_mack = numeric(51)#
+#
+for (n in years_col){#
+	# Create empty vectors to store location (lat,lon) info#
+	latitude <- numeric(100)#
+	longitude <- numeric(100)#
+#
+	for (i in seq_len(100)) {#
+		xy <- str_split(bc_mack[i,n], " ")#
+		latitude[i] <- as.numeric(xy[[1]][1])#
+		longitude[i] <- as.numeric(xy[[1]][2])#
+	}#
+#
+	# Create empty vectors to store location (row,col) info#
+	row_num <- numeric(100)#
+	col_num <- numeric(100)#
+#
+	for (i in seq_len(100)) {#
+		row_num[i] = 62.5 - latitude[i] + 1#
+		col_num[i] = longitude[i] + 16.5 + 1#
+	}#
+#
+	# Create empty vectors to store location (block number) info#
+#
+	# Up to down, left to right#
+	# First block: 62.5, -16.5#
+	# 300th block: 48.5, 2.5#
+	num <- numeric(100)#
+#
+	for (i in seq_len(100)) {#
+		num[i] = 20 * row_num[i] + col_num[i]#
+	}#
+#
+	table(num)#
+#
+	# Create empty vectors to count ending block number#
+	counter = numeric(300)#
+#
+	# Mark Land#
+	for (i in seq_len(300)) {#
+		if(is.na(forecast[i,11]))#
+		counter[i] = NA#
+	}#
+#
+	for (block in num) {#
+		counter[block] = counter[block] + 1#
+	}#
+	current_mack[n-1] = sum(counter[c(	95, 96, 97,  #
+										115,116,117,  #
+											136,137,  #
+												157)])#
+	new_boat_mack[n-1] = sum(counter[c(	    54, 55, 56, 57, 58, 59,#
+										73, 74, 75, 76, 77, 78, 79,#
+										    94, 95, 96, 97, 98, 99,#
+										        115,116,117,118,#
+										            136,137,138,139,#
+										                157,158,159,#
+										                    178,179,#
+										                        199)])#
+	move_south_mack[n-1] = sum(counter[c( 137,138,139,  #
+										  157,158,159,#
+										      178,179,#
+										          199)])#
+	move_north_mack[n-1] = sum(counter[c( 74, 75, 76,#
+										  94, 95, 96,#
+										      115,116,#
+										          136)])									#
+}#
+#
+current_mack#
+new_boat_mack#
+move_south_mack#
+move_north_mack#
+#
+q_mack = data.frame("current" = current_mack, #
+					"new boat" = new_boat_mack, #
+					"move north" = move_south_mack, #
+					"move_south" = move_north_mack)  #
+#
+rownames(q_mack) = seq(2019,2069)					#
+write.csv(q_mack, "q_mackerel_int_water.csv")
+library(ggplot2)#
+library(tidyverse)#
+#
+current = read_csv("current.csv")
+head(current)
+current = read_csv("current.csv", colnames = false)
+help(read_csv)
+current = read_csv("current.csv", col_names = FALSE)
+current
+new_boat = read_csv("newBoat.csv", col_names = FALSE)
+new_boat
+move_north = read_csv("moveNorth.csv", col_names = FALSE)
+plot(current)
+plot(current, type = "l")
+plot(current, type = "l", col = "salmon")#
+lines(new_boat, type = "l", col = "deepskyblue")
+plot(current, type = "l", col = "salmon")#
+lines(new_boat, type = "l", col = "deepskyblue")#
+lines(move_north, type = "l", col = "steelblue")
+pimin = min(current[,2], new_boat[,2], move_north[,2])
+pimin
+pimax = max(current[,2], new_boat[,2], move_north[,2])
+pimax
+plot(current, type = "l", col = "salmon", ylim = c(pimin, pimax))#
+lines(new_boat, type = "l", col = "deepskyblue")#
+lines(move_north, type = "l", col = "steelblue")
+ggplot(current, aes(x = X1, y = X2))
+current$X1
+current$X2
+help(ggplot)
+help(aes)
+ggplot(data = current, mapping = aes(x = X1, y = X2))
+ggplot(data = current, mapping = aes(x = X1, y = X2))
+ggplot(data = current, mapping = aes(x = X1, y = X2)) + #
+	geom_line()
+ggplot(data = current, mapping = aes(x = X1, y = X2)) + #
+	geom_line() +#
+	geom_line(data = current, mapping = aes(x = X1, y = X2))
+ggplot(data = current, mapping = aes(x = X1, y = X2)) + #
+	geom_line() +#
+	geom_line(data = new_boat, mapping = aes(x = X1, y = X2))
+ggplot(data = current, mapping = aes(x = X1, y = X2)) + #
+	geom_line() +#
+	geom_line(data = new_boat, mapping = aes(x = X1, y = X2)) +#
+	geom_line(data = move_north, mapping = aes(x = X1, y = X2))
+ggplot(data = current, mapping = aes(x = X1, y = X2)) + #
+	geom_line() +#
+	geom_line(data = new_boat, mapping = aes(x = X1, y = X2)) +#
+	geom_line(data = move_north, mapping = aes(x = X1, y = X2)) +#
+	xlab("Time") +#
+	ylab("Profit Index")
+data_set = ("time" = current[,1], "current" = current[,2], "boat" = new_boat[,2], "move" = move_north[,2])
+data_set = data.frame("time" = current[,1], "current" = current[,2], "boat" = new_boat[,2], "move" = move_north[,2])
+data_set = gather(data_set)
+data_set
+help(gether)
+help(gather)
+data_set
+data_set = data.frame("time" = current[,1], "current" = current[,2], "boat" = new_boat[,2], "move" = move_north[,2])
+data_set
+data_set = data.frame(time = current[,1], current = current[,2], boat = new_boat[,2], move = move_north[,2])
+data_set
+help(data.frame)
+data_set = data.frame(current[,1], current[,2], new_boat[,2], move_north[,2], row.names = FALSE)
+data_set
+data_set = data.frame(current[,1], current[,2], new_boat[,2], move_north[,2])
+data_set = data.frame(current[,1], current[,2], new_boat[,2], move_north[,2])#
+colnames(data_set) = c("Time", "Current", "New Boat", "Move North")
+data_set
+data_set = gather(key = "Time", value = c("Current", "New Boat", "Move North"))
+help(gather)
+data_set = gather(key = "Time", value = "Profit")
+data_set = gather(data_set, key = "Time", value = "Profit")
+data_set
+library(reshape2)
+data_set <- melt(data_set, id.vars="Time")
+data_set
+data_set = data.frame(current[,1], current[,2], new_boat[,2], move_north[,2])#
+colnames(data_set) = c("Time", "Current", "New Boat", "Move North")
+data_set <- melt(data_set, id.vars="Time")
+data_set
+ggplot(data_set, aes(Xax,value, col=variable)) + #
+  geom_point() + #
+  stat_smooth()
+ggplot(data_set, aes(Time, value, col = variable)) + #
+  geom_point() + #
+  stat_smooth()
+ggplot(data_set, aes(Time, value, col = variable)) + #
+  geom_point() + #
+  stat_smooth() +#
+  xlab("Time") +#
+  ylab("Profit Index")
+ggplot(data_set, aes(Time, value, col = variable)) + #
+  geom_point() + #
+  stat_smooth() +#
+  xlab("Time") +#
+  ylab("Profit Index") +#
+  ggtitle("Profit Trend under All Strategies")
+data_set = data.frame(current[,1], current[,2], new_boat[,2], move_north[,2])#
+colnames(data_set) = c("Time", "Current", "Buy New Boat", "Move North")#
+#
+library(reshape2)#
+data_set <- melt(data_set, id.vars="Time")#
+#
+# Everything on the same plot#
+ggplot(data_set, aes(Time, value, col = variable)) + #
+  geom_point() + #
+  stat_smooth() +#
+  xlab("Time") +#
+  ylab("Profit Index") +#
+  ggtitle("Profit Trend under All Strategies")
+data_set = data.frame(current[,1], current[,2], new_boat[,2], move_north[,2])#
+colnames(data_set) = c("Time", "Current", "Buy New Boat", "Move North")
+data_set <- melt(data_set, id.vars="Time")
+ggplot(data_set, aes(Time, value, col = variable)) + #
+  geom_point() + #
+  stat_smooth() +#
+  xlab("Time") +#
+  ylab("Profit Index") +#
+  ggtitle("Profit Trend under All Strategies")
+png("profit_trend.png")#
+#
+ggplot(data_set, aes(Time, value, col = variable)) + #
+  geom_point() + #
+  stat_smooth() +#
+  xlab("Time") +#
+  ylab("Profit Index") +#
+  ggtitle("Profit Trend under All Strategies")#
+dev.off()
+png("profit_trend.png", 1200, 900)#
+#
+ggplot(data_set, aes(Time, value, col = variable)) + #
+  geom_point() + #
+  stat_smooth() +#
+  xlab("Time") +#
+  ylab("Profit Index") +#
+  ggtitle("Profit Trend under All Strategies")#
+dev.off()
+png("profit_trend.png", 600, 600)#
+#
+ggplot(data_set, aes(Time, value, col = variable)) + #
+  geom_point() + #
+  stat_smooth() +#
+  xlab("Time") +#
+  ylab("Profit Index") +#
+  ggtitle("Profit Trend under All Strategies")#
+dev.off()
+ggplot(data_set, aes(Time, value, col = variable)) + #
+  geom_point() + #
+  stat_smooth() +#
+  xlab("Time") +#
+  ylab("Profit Index") +#
+  ggtitle("Profit Trend under All Strategies") + #
+  theme(text = element_text(size=20))
+png("profit_trend.png", 600, 600)#
+#
+ggplot(data_set, aes(Time, value, col = variable)) + #
+  geom_point() + #
+  stat_smooth() +#
+  xlab("Time") +#
+  ylab("Profit Index") +#
+  ggtitle("Profit Trend under All Strategies") + #
+  theme(text = element_text(size=14))#
+dev.off()
+png("profit_trend.png", 600, 600)#
+#
+ggplot(data_set, aes(Time, value, col = variable)) + #
+  geom_point() + #
+  stat_smooth() +#
+  xlab("Time") +#
+  ylab("Profit Index") +#
+  ggtitle("Profit Trend under All Strategies") + #
+  theme(text = element_text(size=18))#
+dev.off()

@@ -2087,3 +2087,1117 @@ plot(diff(first_block), ylab = "Annually Change of SST", xlab = "Time", lwd = 2,
 legend(x = "topleft", legend = "Detrended Data", col = "skyblue3", lwd = 2, inset = 0.05)#
 #
 dev.off()
+write.csv(t(annual_avg_sst), file = "summer_avg_sst_150.csv")
+sst_150 = read_csv("scot_sst_150.csv") # 1870-2019, monthly data
+library(tidyverse)#
+#
+sst_150 = read_csv("scot_sst_150.csv") # 1870-2019, monthly data
+sst_150 = read_csv("scot_sst_150.csv") # 1870-2019, monthly data#
+sst_150 = t(sst_150) # transpose#
+sst_150_ts <- ts(sst_150, start = c(1870,1), end = c(2019,12), freq = 12)
+# Get Summer data (the average of 6/7/8 months)#
+summer_avg_sst = matrix(nrow = 150, ncol = 300) # to store annually average results#
+#
+for (b in 1:300) { # for each block#
+  # Prepare a vector#
+  b.summer = numeric(150)#
+  # Get the data at the b-th block: first@(-16.5, 62.5), last@(2.5, 48.5)#
+  b.monthly = sst_150_ts[,b]#
+  # Calculate annually mean #
+  for (i in 0:149) {#
+    summer_sum = 0#
+    for (j in 6:8) {#
+      summer_sum = annual_sum + b.monthly[12 * i + j]#
+    }#
+    b.summer[i+1] = summer_sum / 3#
+  }#
+  summer_avg_sst[,b] = b.summer#
+}#
+#
+write.csv(t(summer_avg_sst), file = "summer_avg_sst_150.csv")
+summer_avg_sst = matrix(nrow = 150, ncol = 300) # to store annually average results#
+#
+for (b in 1:300) { # for each block#
+  # Prepare a vector#
+  b.summer = numeric(150)#
+  # Get the data at the b-th block: first@(-16.5, 62.5), last@(2.5, 48.5)#
+  b.monthly = sst_150_ts[,b]#
+  # Calculate annually mean #
+  for (i in 0:149) {#
+    summer_sum = 0#
+    for (j in 6:8) {#
+      summer_sum = summer_sum + b.monthly[12 * i + j]#
+    }#
+    b.summer[i+1] = summer_sum / 3#
+  }#
+  summer_avg_sst[,b] = b.summer#
+}#
+#
+write.csv(t(summer_avg_sst), file = "summer_avg_sst_150.csv")
+write.csv(summer_avg_sst, file = "summer_avg_sst_150.csv")
+library(tidyverse)#
+library('plot.matrix')#
+library(stringr)#
+library("viridis") #
+library(RColorBrewer)
+# ------------------ Forecasted Ending Point Visualization ------------------ ##
+#
+## <--------------------------------------------------------------------------->#
+    ## Best Case, Herring#
+    ## 2019(starting)/2029/2039/2049/2059/2069#
+#
+bc_herr = read_csv("bc_herring.csv", col_names = TRUE)#
+years_of_interest = c(2019, 2029, 2039, 2049, 2059, 2069)#
+years_col = years_of_interest - 2019 + 2#
+#
+for (n in years_col){#
+	# Create empty vectors to store location (lat,lon) info#
+	latitude <- numeric(100)#
+	longitude <- numeric(100)#
+#
+	for (i in seq_len(100)) {#
+		xy <- str_split(bc_herr[i,n], " ")#
+		latitude[i] <- as.numeric(xy[[1]][1])#
+		longitude[i] <- as.numeric(xy[[1]][2])#
+	}#
+#
+	# Create empty vectors to store location (row,col) info#
+	row_num <- numeric(100)#
+	col_num <- numeric(100)#
+#
+	for (i in seq_len(100)) {#
+		row_num[i] = 62.5 - latitude[i] + 1#
+		col_num[i] = longitude[i] + 16.5 + 1#
+	}#
+#
+	# Create empty vectors to store location (block number) info#
+#
+	# Up to down, left to right#
+	# First block: 62.5, -16.5#
+	# 300th block: 48.5, 2.5#
+	num <- numeric(100)#
+#
+	for (i in seq_len(100)) {#
+		num[i] = 20 * row_num[i] + col_num[i]#
+	}#
+#
+	table(num)#
+#
+	# Create empty vectors to count ending block number#
+	counter = numeric(300)#
+#
+	# Mark Land#
+	for (i in seq_len(300)) {#
+		if(is.na(forecast[i,11]))#
+		counter[i] = NA#
+	}#
+#
+	for (block in num) {#
+		counter[block] = counter[block] + 1#
+	}#
+#
+	# Convert counter to matrix form to be visualized on map#
+	loc_counter = matrix(counter, nrow = 15, ncol = 20, byrow = TRUE)#
+#
+	colnames(loc_counter) = seq(-16.5, 2.5, 1)#
+	rownames(loc_counter) = seq(62.5, 48.5, -1)#
+#
+	# Visualize#
+	file = paste("bch_map_20", n+17, ".png", sep = "")#
+	main = paste( "The Mostly Likely Location for Herring in 20", n+17, ", Best Case", sep = "")#
+	png(file, 610, 541)#
+	par(mar = c(5, 5, 5, 5)) # Set the margin on all sides to 5#
+	plot(loc_counter, xlab = "Longitude", ylab = 'Latitude', #
+	main = main, #
+	fmt.cell = '%d', col = plasma(20))#
+	dev.off()#
+}#
+## <--------------------------------------------------------------------------->#
+    ## Worst Case, Herring#
+    ## 2019(starting)/2029/2039/2049/2059/2069#
+wc_herr = read_csv("wc_herring.csv", col_names = TRUE)#
+years_of_interest = c(2019, 2029, 2039, 2049, 2059, 2069)#
+years_col = years_of_interest - 2019 + 2#
+#
+for (n in years_col){#
+	# Create empty vectors to store location (lat,lon) info#
+	latitude <- numeric(100)#
+	longitude <- numeric(100)#
+#
+	for (i in seq_len(100)) {#
+		xy <- str_split(wc_herr[i,n], " ")#
+		latitude[i] <- as.numeric(xy[[1]][1])#
+		longitude[i] <- as.numeric(xy[[1]][2])#
+	}#
+#
+	# Create empty vectors to store location (row,col) info#
+	row_num <- numeric(100)#
+	col_num <- numeric(100)#
+#
+	for (i in seq_len(100)) {#
+		row_num[i] = 62.5 - latitude[i] + 1#
+		col_num[i] = longitude[i] + 16.5 + 1#
+	}#
+#
+	# Create empty vectors to store location (block number) info#
+#
+	# Up to down, left to right#
+	# First block: 62.5, -16.5#
+	# 300th block: 48.5, 2.5#
+	num <- numeric(100)#
+#
+	for (i in seq_len(100)) {#
+		num[i] = 20 * row_num[i] + col_num[i]#
+	}#
+#
+	table(num)#
+#
+	# Create empty vectors to count ending block number#
+	counter = numeric(300)#
+#
+	# Mark Land#
+	for (i in seq_len(300)) {#
+	  if(is.na(forecast[i,11]))#
+		counter[i] = NA#
+	}#
+#
+	for (block in num) {#
+		counter[block] = counter[block] + 1#
+	}#
+#
+	# Convert counter to matrix form to be visualized on map#
+	loc_counter = matrix(counter, nrow = 15, ncol = 20, byrow = TRUE)#
+#
+	colnames(loc_counter) = seq(-16.5, 2.5, 1)#
+	rownames(loc_counter) = seq(62.5, 48.5, -1)#
+#
+	# Visualize#
+	file = paste("wch_map_20", n+17, ".png", sep = "")#
+	main = paste( "The Mostly Likely Location for Herring in 20", n+17, ", Worst Case", sep = "")#
+	png(file, 610, 541)#
+	par(mar = c(5, 5, 5, 5))#
+	plot(loc_counter, xlab = "Longitude", ylab = 'Latitude', #
+	main = main, #
+	fmt.cell = '%d', col = plasma(20))#
+	dev.off()#
+}#
+## <--------------------------------------------------------------------------->#
+    ## Best Case, Mackerel#
+    ## 2019(starting)/2029/2039/2049/2059/2069#
+#
+bc_mack = read_csv("bc_mackerel.csv", col_names = TRUE)#
+years_of_interest = c(2019, 2029, 2039, 2049, 2059, 2069)#
+years_col = years_of_interest - 2019 + 2#
+#
+for (n in years_col){#
+	# Create empty vectors to store location (lat,lon) info#
+	latitude <- numeric(100)#
+	longitude <- numeric(100)#
+#
+	for (i in seq_len(100)) {#
+		xy <- str_split(bc_mack[i,n], " ")#
+		latitude[i] <- as.numeric(xy[[1]][1])#
+		longitude[i] <- as.numeric(xy[[1]][2])#
+	}#
+#
+	# Create empty vectors to store location (row,col) info#
+	row_num <- numeric(100)#
+	col_num <- numeric(100)#
+#
+	for (i in seq_len(100)) {#
+		row_num[i] = 62.5 - latitude[i] + 1#
+		col_num[i] = longitude[i] + 16.5 + 1#
+	}#
+#
+	# Create empty vectors to store location (block number) info#
+#
+	# Up to down, left to right#
+	# First block: 62.5, -16.5#
+	# 300th block: 48.5, 2.5#
+	num <- numeric(100)#
+#
+	for (i in seq_len(100)) {#
+		num[i] = 20 * row_num[i] + col_num[i]#
+	}#
+#
+	table(num)#
+#
+	# Create empty vectors to count ending block number#
+	counter = numeric(300)#
+#
+	# Mark Land#
+	for (i in seq_len(300)) {#
+		if(is.na(forecast[i,11]))#
+		counter[i] = NA#
+	}#
+#
+	for (block in num) {#
+		counter[block] = counter[block] + 1#
+	}#
+#
+	# Convert counter to matrix form to be visualized on map#
+	loc_counter = matrix(counter, nrow = 15, ncol = 20, byrow = TRUE)#
+#
+	colnames(loc_counter) = seq(-16.5, 2.5, 1)#
+	rownames(loc_counter) = seq(62.5, 48.5, -1)#
+#
+	# Visualize#
+	file = paste("bcm_map_20", n+17, ".png", sep = "")#
+	main = paste( "The Mostly Likely Location for Mackerel in 20", n+17, ", Best Case", sep = "")#
+	png(file, 610, 541)#
+	par(mar = c(5, 5, 5, 5))#
+	plot(loc_counter, xlab = "Longitude", ylab = 'Latitude', #
+	main = main, #
+	fmt.cell = '%d', col = plasma(20))#
+	dev.off()#
+}#
+## <--------------------------------------------------------------------------->#
+    ## Worst Case, Mackerel#
+    ## 2019(starting)/2029/2039/2049/2059/2069#
+#
+wc_mack = read_csv("wc_mackerel.csv", col_names = TRUE)#
+years_of_interest = c(2019, 2029, 2039, 2049, 2059, 2069)#
+years_col = years_of_interest - 2019 + 2#
+#
+for (n in years_col){#
+	# Create empty vectors to store location (lat,lon) info#
+	latitude <- numeric(100)#
+	longitude <- numeric(100)#
+#
+	for (i in seq_len(100)) {#
+		xy <- str_split(wc_mack[i,n], " ")#
+		latitude[i] <- as.numeric(xy[[1]][1])#
+		longitude[i] <- as.numeric(xy[[1]][2])#
+	}#
+#
+	# Create empty vectors to store location (row,col) info#
+	row_num <- numeric(100)#
+	col_num <- numeric(100)#
+#
+	for (i in seq_len(100)) {#
+		row_num[i] = 62.5 - latitude[i] + 1#
+		col_num[i] = longitude[i] + 16.5 + 1#
+	}#
+#
+	# Create empty vectors to store location (block number) info#
+#
+	# Up to down, left to right#
+	# First block: 62.5, -16.5#
+	# 300th block: 48.5, 2.5#
+	num <- numeric(100)#
+#
+	for (i in seq_len(100)) {#
+		num[i] = 20 * row_num[i] + col_num[i]#
+	}#
+#
+	table(num)#
+#
+	# Create empty vectors to count ending block number#
+	counter = numeric(300)#
+#
+	# Mark Land#
+	for (i in seq_len(300)) {#
+		if(is.na(forecast[i,11]))#
+		counter[i] = NA#
+	}#
+#
+	for (block in num) {#
+		counter[block] = counter[block] + 1#
+	}#
+#
+	# Convert counter to matrix form to be visualized on map#
+	loc_counter = matrix(counter, nrow = 15, ncol = 20, byrow = TRUE)#
+#
+	colnames(loc_counter) = seq(-16.5, 2.5, 1)#
+	rownames(loc_counter) = seq(62.5, 48.5, -1)#
+#
+	# Visualize#
+	file = paste("wcm_map_20", n+17, ".png", sep = "")#
+	main = paste( "The Mostly Likely Location for Mackerel in 20", n+17, ", Worst Case", sep = "")#
+	png(file, 610, 541)#
+	par(mar = c(5, 5, 5, 5))#
+	plot(loc_counter, xlab = "Longitude", ylab = 'Latitude', #
+	main = main, #
+	fmt.cell = '%d', col = plasma(20))#
+	dev.off()#
+}
+forecast = read.csv("forecast_sst_50_t.csv", row.names = 1)
+# ------------------ Forecasted Ending Point Visualization ------------------ ##
+#
+## <--------------------------------------------------------------------------->#
+    ## Best Case, Herring#
+    ## 2019(starting)/2029/2039/2049/2059/2069#
+#
+bc_herr = read_csv("bc_herring.csv", col_names = TRUE)#
+years_of_interest = c(2019, 2029, 2039, 2049, 2059, 2069)#
+years_col = years_of_interest - 2019 + 2#
+#
+for (n in years_col){#
+	# Create empty vectors to store location (lat,lon) info#
+	latitude <- numeric(100)#
+	longitude <- numeric(100)#
+#
+	for (i in seq_len(100)) {#
+		xy <- str_split(bc_herr[i,n], " ")#
+		latitude[i] <- as.numeric(xy[[1]][1])#
+		longitude[i] <- as.numeric(xy[[1]][2])#
+	}#
+#
+	# Create empty vectors to store location (row,col) info#
+	row_num <- numeric(100)#
+	col_num <- numeric(100)#
+#
+	for (i in seq_len(100)) {#
+		row_num[i] = 62.5 - latitude[i] + 1#
+		col_num[i] = longitude[i] + 16.5 + 1#
+	}#
+#
+	# Create empty vectors to store location (block number) info#
+#
+	# Up to down, left to right#
+	# First block: 62.5, -16.5#
+	# 300th block: 48.5, 2.5#
+	num <- numeric(100)#
+#
+	for (i in seq_len(100)) {#
+		num[i] = 20 * row_num[i] + col_num[i]#
+	}#
+#
+	table(num)#
+#
+	# Create empty vectors to count ending block number#
+	counter = numeric(300)#
+#
+	# Mark Land#
+	for (i in seq_len(300)) {#
+		if(is.na(forecast[i,11]))#
+		counter[i] = NA#
+	}#
+#
+	for (block in num) {#
+		counter[block] = counter[block] + 1#
+	}#
+#
+	# Convert counter to matrix form to be visualized on map#
+	loc_counter = matrix(counter, nrow = 15, ncol = 20, byrow = TRUE)#
+#
+	colnames(loc_counter) = seq(-16.5, 2.5, 1)#
+	rownames(loc_counter) = seq(62.5, 48.5, -1)#
+#
+	# Visualize#
+	file = paste("bch_map_20", n+17, ".png", sep = "")#
+	main = paste( "The Mostly Likely Location for Herring in 20", n+17, ", Best Case", sep = "")#
+	png(file, 610, 541)#
+	par(mar = c(5, 5, 5, 5)) # Set the margin on all sides to 5#
+	plot(loc_counter, xlab = "Longitude", ylab = 'Latitude', #
+	main = main, #
+	fmt.cell = '%d', col = plasma(20))#
+	dev.off()#
+}#
+## <--------------------------------------------------------------------------->#
+    ## Worst Case, Herring#
+    ## 2019(starting)/2029/2039/2049/2059/2069#
+wc_herr = read_csv("wc_herring.csv", col_names = TRUE)#
+years_of_interest = c(2019, 2029, 2039, 2049, 2059, 2069)#
+years_col = years_of_interest - 2019 + 2#
+#
+for (n in years_col){#
+	# Create empty vectors to store location (lat,lon) info#
+	latitude <- numeric(100)#
+	longitude <- numeric(100)#
+#
+	for (i in seq_len(100)) {#
+		xy <- str_split(wc_herr[i,n], " ")#
+		latitude[i] <- as.numeric(xy[[1]][1])#
+		longitude[i] <- as.numeric(xy[[1]][2])#
+	}#
+#
+	# Create empty vectors to store location (row,col) info#
+	row_num <- numeric(100)#
+	col_num <- numeric(100)#
+#
+	for (i in seq_len(100)) {#
+		row_num[i] = 62.5 - latitude[i] + 1#
+		col_num[i] = longitude[i] + 16.5 + 1#
+	}#
+#
+	# Create empty vectors to store location (block number) info#
+#
+	# Up to down, left to right#
+	# First block: 62.5, -16.5#
+	# 300th block: 48.5, 2.5#
+	num <- numeric(100)#
+#
+	for (i in seq_len(100)) {#
+		num[i] = 20 * row_num[i] + col_num[i]#
+	}#
+#
+	table(num)#
+#
+	# Create empty vectors to count ending block number#
+	counter = numeric(300)#
+#
+	# Mark Land#
+	for (i in seq_len(300)) {#
+	  if(is.na(forecast[i,11]))#
+		counter[i] = NA#
+	}#
+#
+	for (block in num) {#
+		counter[block] = counter[block] + 1#
+	}#
+#
+	# Convert counter to matrix form to be visualized on map#
+	loc_counter = matrix(counter, nrow = 15, ncol = 20, byrow = TRUE)#
+#
+	colnames(loc_counter) = seq(-16.5, 2.5, 1)#
+	rownames(loc_counter) = seq(62.5, 48.5, -1)#
+#
+	# Visualize#
+	file = paste("wch_map_20", n+17, ".png", sep = "")#
+	main = paste( "The Mostly Likely Location for Herring in 20", n+17, ", Worst Case", sep = "")#
+	png(file, 610, 541)#
+	par(mar = c(5, 5, 5, 5))#
+	plot(loc_counter, xlab = "Longitude", ylab = 'Latitude', #
+	main = main, #
+	fmt.cell = '%d', col = plasma(20))#
+	dev.off()#
+}#
+## <--------------------------------------------------------------------------->#
+    ## Best Case, Mackerel#
+    ## 2019(starting)/2029/2039/2049/2059/2069#
+#
+bc_mack = read_csv("bc_mackerel.csv", col_names = TRUE)#
+years_of_interest = c(2019, 2029, 2039, 2049, 2059, 2069)#
+years_col = years_of_interest - 2019 + 2#
+#
+for (n in years_col){#
+	# Create empty vectors to store location (lat,lon) info#
+	latitude <- numeric(100)#
+	longitude <- numeric(100)#
+#
+	for (i in seq_len(100)) {#
+		xy <- str_split(bc_mack[i,n], " ")#
+		latitude[i] <- as.numeric(xy[[1]][1])#
+		longitude[i] <- as.numeric(xy[[1]][2])#
+	}#
+#
+	# Create empty vectors to store location (row,col) info#
+	row_num <- numeric(100)#
+	col_num <- numeric(100)#
+#
+	for (i in seq_len(100)) {#
+		row_num[i] = 62.5 - latitude[i] + 1#
+		col_num[i] = longitude[i] + 16.5 + 1#
+	}#
+#
+	# Create empty vectors to store location (block number) info#
+#
+	# Up to down, left to right#
+	# First block: 62.5, -16.5#
+	# 300th block: 48.5, 2.5#
+	num <- numeric(100)#
+#
+	for (i in seq_len(100)) {#
+		num[i] = 20 * row_num[i] + col_num[i]#
+	}#
+#
+	table(num)#
+#
+	# Create empty vectors to count ending block number#
+	counter = numeric(300)#
+#
+	# Mark Land#
+	for (i in seq_len(300)) {#
+		if(is.na(forecast[i,11]))#
+		counter[i] = NA#
+	}#
+#
+	for (block in num) {#
+		counter[block] = counter[block] + 1#
+	}#
+#
+	# Convert counter to matrix form to be visualized on map#
+	loc_counter = matrix(counter, nrow = 15, ncol = 20, byrow = TRUE)#
+#
+	colnames(loc_counter) = seq(-16.5, 2.5, 1)#
+	rownames(loc_counter) = seq(62.5, 48.5, -1)#
+#
+	# Visualize#
+	file = paste("bcm_map_20", n+17, ".png", sep = "")#
+	main = paste( "The Mostly Likely Location for Mackerel in 20", n+17, ", Best Case", sep = "")#
+	png(file, 610, 541)#
+	par(mar = c(5, 5, 5, 5))#
+	plot(loc_counter, xlab = "Longitude", ylab = 'Latitude', #
+	main = main, #
+	fmt.cell = '%d', col = plasma(20))#
+	dev.off()#
+}#
+## <--------------------------------------------------------------------------->#
+    ## Worst Case, Mackerel#
+    ## 2019(starting)/2029/2039/2049/2059/2069#
+#
+wc_mack = read_csv("wc_mackerel.csv", col_names = TRUE)#
+years_of_interest = c(2019, 2029, 2039, 2049, 2059, 2069)#
+years_col = years_of_interest - 2019 + 2#
+#
+for (n in years_col){#
+	# Create empty vectors to store location (lat,lon) info#
+	latitude <- numeric(100)#
+	longitude <- numeric(100)#
+#
+	for (i in seq_len(100)) {#
+		xy <- str_split(wc_mack[i,n], " ")#
+		latitude[i] <- as.numeric(xy[[1]][1])#
+		longitude[i] <- as.numeric(xy[[1]][2])#
+	}#
+#
+	# Create empty vectors to store location (row,col) info#
+	row_num <- numeric(100)#
+	col_num <- numeric(100)#
+#
+	for (i in seq_len(100)) {#
+		row_num[i] = 62.5 - latitude[i] + 1#
+		col_num[i] = longitude[i] + 16.5 + 1#
+	}#
+#
+	# Create empty vectors to store location (block number) info#
+#
+	# Up to down, left to right#
+	# First block: 62.5, -16.5#
+	# 300th block: 48.5, 2.5#
+	num <- numeric(100)#
+#
+	for (i in seq_len(100)) {#
+		num[i] = 20 * row_num[i] + col_num[i]#
+	}#
+#
+	table(num)#
+#
+	# Create empty vectors to count ending block number#
+	counter = numeric(300)#
+#
+	# Mark Land#
+	for (i in seq_len(300)) {#
+		if(is.na(forecast[i,11]))#
+		counter[i] = NA#
+	}#
+#
+	for (block in num) {#
+		counter[block] = counter[block] + 1#
+	}#
+#
+	# Convert counter to matrix form to be visualized on map#
+	loc_counter = matrix(counter, nrow = 15, ncol = 20, byrow = TRUE)#
+#
+	colnames(loc_counter) = seq(-16.5, 2.5, 1)#
+	rownames(loc_counter) = seq(62.5, 48.5, -1)#
+#
+	# Visualize#
+	file = paste("wcm_map_20", n+17, ".png", sep = "")#
+	main = paste( "The Mostly Likely Location for Mackerel in 20", n+17, ", Worst Case", sep = "")#
+	png(file, 610, 541)#
+	par(mar = c(5, 5, 5, 5))#
+	plot(loc_counter, xlab = "Longitude", ylab = 'Latitude', #
+	main = main, #
+	fmt.cell = '%d', col = plasma(20))#
+	dev.off()#
+}
+## <--------------------------------------------------------------------------->#
+    ## Best Case, Herring#
+    ## 2019(starting)/2029/2039/2049/2059/2069#
+#
+bc_herr = read_csv("bc_herring.csv", col_names = TRUE)#
+years_of_interest = c(2019, 2029, 2039, 2049, 2059, 2069)#
+years_col = years_of_interest - 2019 + 2#
+#
+for (n in years_col){#
+	# Create empty vectors to store location (lat,lon) info#
+	latitude <- numeric(100)#
+	longitude <- numeric(100)#
+#
+	for (i in seq_len(100)) {#
+		xy <- str_split(bc_herr[i,n], " ")#
+		latitude[i] <- as.numeric(xy[[1]][1])#
+		longitude[i] <- as.numeric(xy[[1]][2])#
+	}#
+#
+	# Create empty vectors to store location (row,col) info#
+	row_num <- numeric(100)#
+	col_num <- numeric(100)#
+#
+	for (i in seq_len(100)) {#
+		row_num[i] = 62.5 - latitude[i] + 1#
+		col_num[i] = longitude[i] + 16.5 + 1#
+	}#
+#
+	# Create empty vectors to store location (block number) info#
+#
+	# Up to down, left to right#
+	# First block: 62.5, -16.5#
+	# 300th block: 48.5, 2.5#
+	num <- numeric(100)#
+#
+	for (i in seq_len(100)) {#
+		num[i] = 20 * row_num[i] + col_num[i]#
+	}#
+#
+	table(num)#
+#
+	# Create empty vectors to count ending block number#
+	counter = numeric(300)#
+#
+	# Mark Land#
+	for (i in seq_len(300)) {#
+		if(is.na(forecast[i,11]))#
+		counter[i] = NA#
+	}#
+#
+	for (block in num) {#
+		counter[block] = counter[block] + 1#
+	}#
+#
+	# Convert counter to matrix form to be visualized on map#
+	loc_counter = matrix(counter, nrow = 15, ncol = 20, byrow = TRUE)#
+#
+	colnames(loc_counter) = seq(-16.5, 2.5, 1)#
+	rownames(loc_counter) = seq(62.5, 48.5, -1)#
+#
+	# Visualize#
+	file = paste("bch_map_20", n+17, ".png", sep = "")#
+	main = paste( "The Mostly Likely Location for Herring in 20", n+17, ", Best Case", sep = "")#
+	png(file, 610, 541)#
+	par(mar = c(5, 5, 5, 5)) # Set the margin on all sides to 5#
+	plot(loc_counter, xlab = "Longitude", ylab = 'Latitude', #
+	main = main, #
+	fmt.cell = '%d', col = plasma(20))#
+	dev.off()#
+}
+library(tidyverse)#
+library('plot.matrix')#
+library(stringr)#
+library("viridis") #
+library(RColorBrewer)
+## 2019(starting)/2029/2039/2049/2059/2069#
+#
+bc_herr = read_csv("bc_herring.csv", col_names = TRUE)#
+years_of_interest = c(2019, 2029, 2039, 2049, 2059, 2069)#
+years_col = years_of_interest - 2019 + 2#
+#
+for (n in years_col){#
+	# Create empty vectors to store location (lat,lon) info#
+	latitude <- numeric(100)#
+	longitude <- numeric(100)#
+#
+	for (i in seq_len(100)) {#
+		xy <- str_split(bc_herr[i,n], " ")#
+		latitude[i] <- as.numeric(xy[[1]][1])#
+		longitude[i] <- as.numeric(xy[[1]][2])#
+	}#
+#
+	# Create empty vectors to store location (row,col) info#
+	row_num <- numeric(100)#
+	col_num <- numeric(100)#
+#
+	for (i in seq_len(100)) {#
+		row_num[i] = 62.5 - latitude[i] + 1#
+		col_num[i] = longitude[i] + 16.5 + 1#
+	}#
+#
+	# Create empty vectors to store location (block number) info#
+#
+	# Up to down, left to right#
+	# First block: 62.5, -16.5#
+	# 300th block: 48.5, 2.5#
+	num <- numeric(100)#
+#
+	for (i in seq_len(100)) {#
+		num[i] = 20 * row_num[i] + col_num[i]#
+	}#
+#
+	table(num)#
+#
+	# Create empty vectors to count ending block number#
+	counter = numeric(300)#
+#
+	# Mark Land#
+	for (i in seq_len(300)) {#
+		if(is.na(forecast[i,11]))#
+		counter[i] = NA#
+	}#
+#
+	for (block in num) {#
+		counter[block] = counter[block] + 1#
+	}#
+#
+	# Convert counter to matrix form to be visualized on map#
+	loc_counter = matrix(counter, nrow = 15, ncol = 20, byrow = TRUE)#
+#
+	colnames(loc_counter) = seq(-16.5, 2.5, 1)#
+	rownames(loc_counter) = seq(62.5, 48.5, -1)#
+#
+	# Visualize#
+	file = paste("bch_map_20", n+17, ".png", sep = "")#
+	main = paste( "The Mostly Likely Location for Herring in 20", n+17, ", Best Case", sep = "")#
+	png(file, 610, 541)#
+	par(mar = c(5, 5, 5, 5)) # Set the margin on all sides to 5#
+	plot(loc_counter, xlab = "Longitude", ylab = 'Latitude', #
+	main = main, #
+	fmt.cell = '%d', col = plasma(20))#
+	dev.off()#
+}
+forecast = read.csv("forecast_sst_50_t.csv", row.names = 1)
+## Best Case, Herring#
+    ## 2019(starting)/2029/2039/2049/2059/2069#
+#
+bc_herr = read_csv("bc_herring.csv", col_names = TRUE)#
+years_of_interest = c(2019, 2029, 2039, 2049, 2059, 2069)#
+years_col = years_of_interest - 2019 + 2#
+#
+for (n in years_col){#
+	# Create empty vectors to store location (lat,lon) info#
+	latitude <- numeric(100)#
+	longitude <- numeric(100)#
+#
+	for (i in seq_len(100)) {#
+		xy <- str_split(bc_herr[i,n], " ")#
+		latitude[i] <- as.numeric(xy[[1]][1])#
+		longitude[i] <- as.numeric(xy[[1]][2])#
+	}#
+#
+	# Create empty vectors to store location (row,col) info#
+	row_num <- numeric(100)#
+	col_num <- numeric(100)#
+#
+	for (i in seq_len(100)) {#
+		row_num[i] = 62.5 - latitude[i] + 1#
+		col_num[i] = longitude[i] + 16.5 + 1#
+	}#
+#
+	# Create empty vectors to store location (block number) info#
+#
+	# Up to down, left to right#
+	# First block: 62.5, -16.5#
+	# 300th block: 48.5, 2.5#
+	num <- numeric(100)#
+#
+	for (i in seq_len(100)) {#
+		num[i] = 20 * row_num[i] + col_num[i]#
+	}#
+#
+	table(num)#
+#
+	# Create empty vectors to count ending block number#
+	counter = numeric(300)#
+#
+	# Mark Land#
+	for (i in seq_len(300)) {#
+		if(is.na(forecast[i,11]))#
+		counter[i] = NA#
+	}#
+#
+	for (block in num) {#
+		counter[block] = counter[block] + 1#
+	}#
+#
+	# Convert counter to matrix form to be visualized on map#
+	loc_counter = matrix(counter, nrow = 15, ncol = 20, byrow = TRUE)#
+#
+	colnames(loc_counter) = seq(-16.5, 2.5, 1)#
+	rownames(loc_counter) = seq(62.5, 48.5, -1)#
+#
+	# Visualize#
+	file = paste("bch_map_20", n+17, ".png", sep = "")#
+	main = paste( "The Mostly Likely Location for Herring in 20", n+17, ", Best Case", sep = "")#
+	png(file, 610, 541)#
+	par(mar = c(5, 5, 5, 5)) # Set the margin on all sides to 5#
+	plot(loc_counter, xlab = "Longitude", ylab = 'Latitude', #
+	main = main, #
+	fmt.cell = '%d', col = plasma(20))#
+	dev.off()#
+}
+annual_avg_sst = read.csv("annual_avg_sst_150.csv", row.names = 1)
+first_block = ts(annual_avg_sst[,1], start = 1870, end = 2019)
+adf.test(first_block)
+library(tidyverse)#
+library(forecast)#
+library(stats)#
+library(tis)#
+library(trend)#
+library(tseries)#
+library(fpp2)
+adf.test(first_block)
+adf.test(first_block, k = 1)
+training <- subset(first_block, end=length(first_block)-10)#
+test <- subset(first_block, start=length(first_block)-9)#
+#
+train.101 <- Arima(training, order = c(1,0,1), include.drift = TRUE)#
+train.101 %>%#
+  forecast(h = 10) %>%#
+  autoplot() + autolayer(test)#
+#
+train.300 <- Arima(training, order = c(3,0,0), include.drift = TRUE)#
+train.300 %>%#
+  forecast(h = 10) %>%#
+  autoplot() + autolayer(test)#
+#
+train.201 <- Arima(training, order = c(2,0,1), include.drift = TRUE)#
+train.201 %>%#
+  forecast(h = 10) %>%#
+  autoplot() + autolayer(test)#
+#
+train.102 <- Arima(training, order = c(1,0,2), include.drift = TRUE)#
+train.102 %>%#
+  forecast(h = 10) %>%#
+  autoplot() + autolayer(test)#
+#
+accuracy(forecast(train.101), test)#
+accuracy(forecast(train.300), test)#
+accuracy(forecast(train.201), test)#
+accuracy(forecast(train.102), test)
+boxplot(accuracy(forecast(train.101), test))
+boxplot(accuracy(forecast(train.101), test)$MAPE)
+str(accuracy(forecast(train.101), test))
+boxplot(accuracy(forecast(train.101), test)[[2]])
+accuracy(forecast(train.101), test)[1]
+accuracy(forecast(train.101), test)[2]
+accuracy(forecast(train.101), test)[3]
+accuracy(forecast(train.101), test)
+boxplot(accuracy(forecast(train.101), test)[4])
+accuracy(forecast(train.101), test)[4]
+accuracy(forecast(train.101), test)[4]#
+accuracy(forecast(train.300), test)[4]#
+accuracy(forecast(train.201), test)[4]#
+accuracy(forecast(train.102), test)[4]
+accuracy(forecast(train.101), test)[10]#
+accuracy(forecast(train.300), test)[10]#
+accuracy(forecast(train.201), test)[10]#
+accuracy(forecast(train.102), test)[10]
+arima300 = Arima(first_block, order = c(3,0,0), include.drift = TRUE)#
+plot(forecast(arima300, 50)) #
+lines(arima300$fitted, col = "red")
+#***************************************************************************#
+# Computing Fish Density q USING OLD STARTING POINT #
+# *Int.waters taken into acount*#
+# Dataset: #
+#		"forecast_sst_50.csv"      		2020-2069#
+#		"bc_herring.csv"      end coordinates of best case herring#
+#		"bc_mackerel.csv"     end coordinates of best case mackerel   #
+# Author: Hao Jin#
+#***************************************************************************#
+#
+library(tidyverse)#
+library('plot.matrix')#
+library(stringr)#
+library("viridis") #
+library(RColorBrewer)  #
+#
+forecast = read.csv("forecast_sst_50_t.csv", row.names = 1)#
+bc_herr = read_csv("bc_herring.csv", col_names = TRUE)#
+bc_mack = read_csv("bc_mackerel.csv", col_names = TRUE)#
+#
+# Current fishing port, old fishing boat covers#
+# 95,  96,  97, #
+# 115, 116, 117, #
+#      136, 137#
+#			157#
+#
+# Current fishing port, new fishing boat covers#
+#     54, 55, 56, 57, 58, 59 #
+# 73, 74, 75, 76, 77, 78, 79#
+#     94, 95, 96, 97, 98, 99#
+#		  115,116,117,118#
+#			  136,137,138,139#
+#			  	  157,158,159#
+#				      178,179#
+#						  199#
+#
+# Move south, old fishing boat covers#
+# 137,138,139#
+# 157,158,159#
+# 	  178,179#
+#		  199#
+#
+# Move south, old fishing boat covers#
+# 74, 75, 76#
+# 94, 95, 96#
+# 114,115,116#
+#         136#
+# ------------------------------------------ Herring ------------------------------------------ ##
+#
+years_of_interest = seq(2019, 2069)#
+years_col = years_of_interest - 2019 + 2#
+#
+current_herr = numeric(51)#
+new_boat_herr = numeric(51)#
+move_south_herr = numeric(51)#
+move_north_herr = numeric(51)#
+#
+for (n in years_col){#
+	# Create empty vectors to store location (lat,lon) info#
+	latitude <- numeric(100)#
+	longitude <- numeric(100)#
+#
+	for (i in seq_len(100)) {#
+		xy <- str_split(bc_herr[i,n], " ")#
+		latitude[i] <- as.numeric(xy[[1]][1])#
+		longitude[i] <- as.numeric(xy[[1]][2])#
+	}#
+#
+	# Create empty vectors to store location (row,col) info#
+	row_num <- numeric(100)#
+	col_num <- numeric(100)#
+#
+	for (i in seq_len(100)) {#
+		row_num[i] = 62.5 - latitude[i] + 1#
+		col_num[i] = longitude[i] + 16.5 + 1#
+	}#
+#
+	# Create empty vectors to store location (block number) info#
+#
+	# Up to down, left to right#
+	# First block: 62.5, -16.5#
+	# 300th block: 48.5, 2.5#
+	num <- numeric(100)#
+#
+	for (i in seq_len(100)) {#
+		num[i] = 20 * row_num[i] + col_num[i]#
+	}#
+#
+	table(num)#
+#
+	# Create empty vectors to count ending block number#
+	counter = numeric(300)#
+#
+	# Mark Land#
+	for (i in seq_len(300)) {#
+		if(is.na(forecast[i,11]))#
+		counter[i] = NA#
+	}#
+#
+	for (block in num) {#
+		counter[block] = counter[block] + 1#
+	}#
+	current_herr[n-1] = sum(counter[c(	95, 96, 97,  #
+										115,116,117,  #
+											136,137,  #
+												157)])#
+	new_boat_herr[n-1] = sum(counter[c(	    54, 55, 56, 57, 58, 59,#
+										73, 74, 75, 76, 77, 78, 79,#
+										    94, 95, 96, 97, 98, 99,#
+										        115,116,117,118,#
+										            136,137,138,139,#
+										                157,158,159,#
+										                    178,179,#
+										                        199)])#
+	move_south_herr[n-1] = sum(counter[c( 137,138,139,  #
+										  157,158,159,#
+										      178,179,#
+										          199)])#
+	move_north_herr[n-1] = sum(counter[c( 74, 75, 76,#
+										  94, 95, 96,#
+										      115,116,#
+										          136)])									#
+}#
+#
+current_herr#
+new_boat_herr#
+move_south_herr#
+move_north_herr#
+#
+q_herr = data.frame("current" = current_herr, #
+					"new boat" = new_boat_herr, #
+					"move north" = move_south_herr, #
+					"move_south" = move_north_herr)  #
+#
+rownames(q_herr) = seq(2019,2069)					#
+write.csv(q_herr, "q_herring_int_water.csv")#
+# ------------------------------------------ Mackerel ------------------------------------------ ##
+#
+years_of_interest = seq(2019, 2069)#
+years_col = years_of_interest - 2019 + 2#
+#
+current_mack = numeric(51)#
+new_boat_mack = numeric(51)#
+move_south_mack = numeric(51)#
+move_north_mack = numeric(51)#
+#
+for (n in years_col){#
+	# Create empty vectors to store location (lat,lon) info#
+	latitude <- numeric(100)#
+	longitude <- numeric(100)#
+#
+	for (i in seq_len(100)) {#
+		xy <- str_split(bc_mack[i,n], " ")#
+		latitude[i] <- as.numeric(xy[[1]][1])#
+		longitude[i] <- as.numeric(xy[[1]][2])#
+	}#
+#
+	# Create empty vectors to store location (row,col) info#
+	row_num <- numeric(100)#
+	col_num <- numeric(100)#
+#
+	for (i in seq_len(100)) {#
+		row_num[i] = 62.5 - latitude[i] + 1#
+		col_num[i] = longitude[i] + 16.5 + 1#
+	}#
+#
+	# Create empty vectors to store location (block number) info#
+#
+	# Up to down, left to right#
+	# First block: 62.5, -16.5#
+	# 300th block: 48.5, 2.5#
+	num <- numeric(100)#
+#
+	for (i in seq_len(100)) {#
+		num[i] = 20 * row_num[i] + col_num[i]#
+	}#
+#
+	table(num)#
+#
+	# Create empty vectors to count ending block number#
+	counter = numeric(300)#
+#
+	# Mark Land#
+	for (i in seq_len(300)) {#
+		if(is.na(forecast[i,11]))#
+		counter[i] = NA#
+	}#
+#
+	for (block in num) {#
+		counter[block] = counter[block] + 1#
+	}#
+	current_mack[n-1] = sum(counter[c(	95, 96, 97,  #
+										115,116,117,  #
+											136,137,  #
+												157)])#
+	new_boat_mack[n-1] = sum(counter[c(	    54, 55, 56, 57, 58, 59,#
+										73, 74, 75, 76, 77, 78, 79,#
+										    94, 95, 96, 97, 98, 99,#
+										        115,116,117,118,#
+										            136,137,138,139,#
+										                157,158,159,#
+										                    178,179,#
+										                        199)])#
+	move_south_mack[n-1] = sum(counter[c( 137,138,139,  #
+										  157,158,159,#
+										      178,179,#
+										          199)])#
+	move_north_mack[n-1] = sum(counter[c( 74, 75, 76,#
+										  94, 95, 96,#
+										      115,116,#
+										          136)])									#
+}#
+#
+current_mack#
+new_boat_mack#
+move_south_mack#
+move_north_mack#
+#
+q_mack = data.frame("current" = current_mack, #
+					"new boat" = new_boat_mack, #
+					"move north" = move_south_mack, #
+					"move_south" = move_north_mack)  #
+#
+rownames(q_mack) = seq(2019,2069)					#
+write.csv(q_mack, "q_mackerel_int_water.csv")

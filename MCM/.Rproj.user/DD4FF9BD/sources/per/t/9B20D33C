@@ -5,15 +5,15 @@
     "dirty" : false,
     "encoding" : "UTF-8",
     "folds" : "",
-    "hash" : "2032495039",
+    "hash" : "493183038",
     "id" : "9B20D33C",
-    "lastKnownWriteTime" : 1591239540,
-    "last_content_update" : 1591239540781,
+    "lastKnownWriteTime" : 1591611286,
+    "last_content_update" : 1591611286385,
     "path" : "~/Desktop/MCM/sst_visual.R",
     "project_path" : "sst_visual.R",
     "properties" : {
-        "cursorPosition" : "198,14",
-        "scrollLine" : "188"
+        "cursorPosition" : "21,0",
+        "scrollLine" : "23"
     },
     "read_only" : false,
     "read_only_alternatives" : [
