@@ -6,71 +6,82 @@
 using namespace std;
 
 
-//function updates vectors
+// function updates vectors
 void createVectors(vector<double>& a,vector<double>&b, 
     vector<double>&c, vector<double>&d, string filename);
 
 int main(){
     
-    //create herring vectors
+    // create herring vectors
     vector<double> h_current;
     vector<double> h_newBoat;
     vector<double> h_moveNorth;
     vector<double> h_moveSouth;
     createVectors(h_current, h_newBoat, h_moveNorth, 
-        h_moveSouth, "q_herring.csv");
+        h_moveSouth, "q_herring_int_water.csv");
     
-    //create mackerel vectors
+    // create mackerel vectors
     vector<double> m_current;
     vector<double> m_newBoat;
     vector<double> m_moveNorth;
     vector<double> m_moveSouth;
     createVectors(m_current, m_newBoat, m_moveNorth, 
-        m_moveSouth, "q_mackerel.csv");
+        m_moveSouth, "q_mackerel_int_water.csv");
     
-    //k value:  86
-    //boats fish 5 days out of seven each week on average
-    //boats can go up to three days w/o refrigeration
-    //k = 5*52/3
-    double old_k = 86;
+    // k value:  86
+    // boats fish 5 days out of seven each week on average
+    // boats can go up to three days w/o refrigeration
+    // k = 5*52/3
+    double old_k = 1;
     
-    //k value:  43
-    //boats fish 5 days out of seven each week on average
-    //boats can go up to six days w/o refrigeration
-    //k = 5*52/6
-    double new_k = 43;
+    // k value:  43
+    // boats fish 5 days out of seven each week on average
+    // boats can go up to six days w/o refrigeration
+    // k = 5*52/6
+    double new_k = .5;
     
     //fixed costs
-    double boat = 50, boat_fridge = 52, port = 14;
-    
-    /*Constructor for Model A:
-      Model(double c0, vector<double> herring, 
-      vector <double> mackerel, double input_k);
-     */
-   //current model
+    double boat = .93, boat_fridge = .96, port = .07;
+
+
+    // current model
     Model current(boat,h_current,m_current, old_k);
     current.data("current.csv");
     
-    //fridge model
-    Model newBoat(boat_fridge, h_newBoat,m_newBoat, new_k);
-    newBoat.data("newBoat.csv");
+    // fridge model
+    Model newBoat(boat_fridge, h_newBoat,m_newBoat, new_k); 
+        newBoat.data("newBoat_int_water.csv");
     
     
-   /*Constructor for Model B:
-    Model(double c0,double input_a,vector<double> herring, 
-    vector <double> mackerel, vector<double> h0, vector<double>m0, double input_k)
-    */
+    // relocation model
+    double relocation_year1 = 2;
+    Model moveNorth1(boat,port,h_current,m_current,h_moveNorth, m_moveNorth, 
+        old_k, relocation_year1); moveNorth1.data("moveNorth2022.csv");
+    // before the density becomes too small
+    // bar with highest density 2020
     
-    //relocation model
-    Model moveNorth(boat,port,h_current,m_current,h_moveNorth, m_moveNorth, old_k);
-    moveNorth.data("moveNorth.csv");
+    
+    // relocation model
+    double relocation_year2 = 7;
+    Model moveNorth2(boat,port,h_current,m_current,h_moveNorth, m_moveNorth, 
+        old_k, relocation_year2); moveNorth2.data("moveNorth2027.csv");
+    // before the density becomes too small
+    // bar with highest density 2020
+    
+    
+    // relocation model
+    double relocation_year3 = 14;
+    Model moveNorth3(boat,port,h_current,m_current,h_moveNorth, m_moveNorth, 
+        old_k, relocation_year3); moveNorth3.data("moveNorth2034.csv");
+    // before the density becomes too small
+    // bar with highest density 2020
     
     return 0;
 }
 
-//function updates vectors
-void createVectors(vector<double>& a,vector<double>&b, 
-    vector<double>&c, vector<double>&d, string filename) {
+// function updates vectors
+void createVectors(vector<double>& a,vector<double>&b, vector<double>&c, 
+                        vector<double>&d, string filename) {
     ifstream input;
     input.open(filename);
     int count = 0;
@@ -99,5 +110,4 @@ void createVectors(vector<double>& a,vector<double>&b,
         }
     }
     input.close();
-}
-           
+}        

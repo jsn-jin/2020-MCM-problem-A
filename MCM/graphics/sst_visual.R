@@ -111,19 +111,23 @@ for (n in years_col){
 	}
 
 	table(num)
+	
+	print(num)
 
 	# Create empty vectors to count ending block number
 	counter = numeric(300)
 
 	# Mark Land
 	for (i in seq_len(300)) {
-		if(is.na(forecast[i,11]))
+		if(is.na(forecast[i,2]))
 		counter[i] = NA
 	}
+
 
 	for (block in num) {
 		counter[block] = counter[block] + 1
 	}
+	
 
 	# Convert counter to matrix form to be visualized on map
 	loc_counter = matrix(counter, nrow = 15, ncol = 20, byrow = TRUE)

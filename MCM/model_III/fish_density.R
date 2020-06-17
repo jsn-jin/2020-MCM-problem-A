@@ -241,6 +241,28 @@ write.csv(q_mack, "q_mackerel.csv")
 
 
 
+sum_current = current_herr + current_mack
+sum_move_north = move_north_herr + move_north_mack
+
+
+data_set = data.frame(seq(2019,2069), sum_current, sum_move_north)
+colnames(data_set) = c("Time", "Current", "Relocate")
+
+data_set <- melt(data_set, id.vars="Time")
+
+png("density_trend.png", 600, 600)
+
+ggplot(data_set, aes(Time, value, col = variable)) + 
+  geom_line() + 
+  xlab("Time") +
+  ylab("Sum of Herring and Mackerel q-values") +
+  ggtitle("The Fish Density") + 
+  theme(text = element_text(size=15))
+  
+dev.off()
+
+
+
 
 
 

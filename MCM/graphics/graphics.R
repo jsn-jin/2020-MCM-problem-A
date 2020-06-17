@@ -11,19 +11,8 @@ library(ggplot2)
 bc_herr <- read_csv("bc_herring.csv", col_names = TRUE)
 bc_herr <- bc_herr[,-1]
 
-#plot.new()
 longitude <- numeric(51)
 latitude <- numeric(51)
-
-#for(i in seq_len(100)) {
-  #for(j in seq_len(51)) {
-    #xy <- str_split(bc_herr[1, j], " ")
-    #y[j] <- as.numeric(xy[[1]][1])
-    #x[j] <- as.numeric(xy[[1]][2])
-    
-  #}
-  #smoothScatter(x, y)
-#}
 
 end_pos <- bc_herr$X50
 
