@@ -1,5 +1,4 @@
-# Final Project
-2020 MCM Problem A
+# 2020 MCM Problem A
 
 * `/data`: R script to extract data we want
 
